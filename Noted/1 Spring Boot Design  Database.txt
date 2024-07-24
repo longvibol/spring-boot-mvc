@@ -1,0 +1,154 @@
+Spring Boot Design : Database
+
+* Product
+
+- id (productid)
+- name
+- dateImport
+- modelId 
+- importPrice
+- color
+
+
+------------------------- 
+
+* Model: (one Model iPhone)
+- id
+- brandId
+- name 
+
+-------------------------
+
+* Brand: (iPhone, Sumsong, Nokia, Huiwei, Oppo...) 
+- id
+- name
+
+-------------------------
+
+* Sale: (object)
+- id
+- saleDate
+
+
+-------------------------
+
+* SaleDetail (list) 
+
+- saleId
+- productid
+- price
+
+Example: 
+
+1: iPhone 14, speaker jbl, charger 
+
+SaleId, ProductId , Price 
+
+- 1 , 2 , 1300 : iPhone 14
+- 1 , 4 , 50 : speaker jbl
+- 1 , 10 , 20  : charger
+
+
+
+========================================== 
+
+- Integration Test: QA team for testing code in real 
+- AutoMap Tool : tool for testing 
+- entity = model = table 
+
+
+------------------
+
+No identifier specified for entity =  need to add id at entity 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
