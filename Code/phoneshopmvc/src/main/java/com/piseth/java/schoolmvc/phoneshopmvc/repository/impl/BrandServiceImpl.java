@@ -1,5 +1,6 @@
 package com.piseth.java.schoolmvc.phoneshopmvc.repository.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,16 @@ public class BrandServiceImpl implements BrandService {
 		brand.setName(brandUpdate.getName()); // Need to update in case it have many field how to do it 
 		
 		return brandRepository.save(brand);
+	}
+
+	@Override
+	public List<Brand> getBrands() {		
+		return brandRepository.findAll();
+	}
+
+	@Override
+	public List<Brand> getBrands(String name) {
+		return brandRepository.findByName(name);
 	}
 
 	

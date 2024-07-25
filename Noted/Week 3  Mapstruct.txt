@@ -1,0 +1,6 @@
+Week 3 : Mapstruct
+
+How to use Mapstruct 
+
+1. Mapstruct create instance 
+2. Custom method 
