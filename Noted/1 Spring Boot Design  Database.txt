@@ -61,6 +61,22 @@ SaleId, ProductId , Price
 
 No identifier specified for entity =  need to add id at entity 
 
+Brand : 1 can have N: Model 
+
+Summary
+
+brand 1 ->n model 
+
+so if we are now at Model mean 
+
+model n -> 1 brand 
+
+--------------------------- 
+
+- dto = Data Transfer Object 
+- @ResponseBody = what it return to database = @RestController
+
+
 
 
 
