@@ -19,6 +19,7 @@ import com.piseth.java.schoolmvc.phoneshopmvc.entity.Brand;
 import com.piseth.java.schoolmvc.phoneshopmvc.mapper.BrandMapper;
 import com.piseth.java.schoolmvc.phoneshopmvc.service.BrandService;
 
+
 @RestController
 @RequestMapping("brands")
 public class BrandController {
@@ -65,9 +66,9 @@ public class BrandController {
 
 		return ResponseEntity.ok(list);
 
-	}
+	}	
 	
-	@GetMapping(name = "filter")
+	@GetMapping("filter")
 	public ResponseEntity<?> findByName(@RequestParam("name") String name) {
 		
 		List<BrandDTO> list = brandService.getBrands(name)
@@ -78,5 +79,6 @@ public class BrandController {
 		return ResponseEntity.ok(list);
 
 	}
+	
 
 }

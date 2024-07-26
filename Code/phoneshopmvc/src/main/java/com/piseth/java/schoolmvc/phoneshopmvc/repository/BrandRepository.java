@@ -10,6 +10,7 @@ import com.piseth.java.schoolmvc.phoneshopmvc.entity.Brand;
 @Repository
 public interface BrandRepository extends JpaRepository<Brand, Integer>{
 	
-	List<Brand> findByName(String name);
+	List<Brand> findByNameLike(String name);
+	List<Brand> findByNameContaining(String name);
 
 }

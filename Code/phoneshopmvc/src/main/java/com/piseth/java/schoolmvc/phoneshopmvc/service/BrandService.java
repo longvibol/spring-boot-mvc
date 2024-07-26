@@ -10,6 +10,6 @@ public interface BrandService{
 	Brand findById(Integer id);
 	Brand update(Integer id, Brand brandUpdate);
 	List<Brand> getBrands();
-	List<Brand> getBrands(String name);
+	List<Brand> getBrands(String name); // Method Overload that why have the same name getBrands
 
 }
