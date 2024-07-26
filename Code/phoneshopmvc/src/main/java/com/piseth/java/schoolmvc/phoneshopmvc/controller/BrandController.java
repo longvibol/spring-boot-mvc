@@ -1,9 +1,12 @@
 package com.piseth.java.schoolmvc.phoneshopmvc.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.piseth.java.schoolmvc.phoneshopmvc.dto.BrandDTO;
+import com.piseth.java.schoolmvc.phoneshopmvc.dto.PageDTO;
 import com.piseth.java.schoolmvc.phoneshopmvc.entity.Brand;
 import com.piseth.java.schoolmvc.phoneshopmvc.mapper.BrandMapper;
 import com.piseth.java.schoolmvc.phoneshopmvc.service.BrandService;
@@ -56,29 +60,30 @@ public class BrandController {
 		return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(updatedBrand));
 	}
 	
+	/*
 	@GetMapping
-	public ResponseEntity<?> getBrands() {
+	public ResponseEntity<?> getBrands(@RequestParam Map<String, String> params) {
 		
-		List<BrandDTO> list = brandService.getBrands()
-			.stream()
+		List<BrandDTO> list = brandService.getBrands(params).stream()
 			.map(brand -> BrandMapper.INSTANCE.toBrandDTO(brand))
-			.collect(Collectors.toList());			
-
+			.collect(Collectors.toList());
+		
 		return ResponseEntity.ok(list);
 
 	}	
+	*/
 	
-	@GetMapping("filter")
-	public ResponseEntity<?> findByName(@RequestParam("name") String name) {
+	
+	@GetMapping
+	public ResponseEntity<?> getBrands(@RequestParam Map<String, String> params) {
 		
-		List<BrandDTO> list = brandService.getBrands(name)
-			.stream()
-			.map(brand -> BrandMapper.INSTANCE.toBrandDTO(brand))
-			.collect(Collectors.toList());			
+		Page<Brand> page = brandService.getBrands(params);
+		
+		PageDTO pageDTO = new PageDTO(page);
+		
+		return ResponseEntity.ok(pageDTO);
+			
 
-		return ResponseEntity.ok(list);
-
-	}
-	
+	}	
 
 }
