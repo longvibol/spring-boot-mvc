@@ -1,0 +1,4 @@
+Week 2
+
+- We use Groble Expection Handler in spring or spring-boot they use Spring Advice 
+- AOP : Aspect Orented Programing (cross cutting concern) 

@@ -1,0 +1,15 @@
+Week 3 : Mapstruct
+
+How to use Mapstruct 
+
+1. Mapstruct create instance 
+2. Custom method query : we can do query by ourselves 
+3. Name Query 
+
+
+------------------------------------
+
+/filter?name=Nokia
+
+
+findByFirstnameIgnoreCase

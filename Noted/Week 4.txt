@@ -1,0 +1,24 @@
+Week 4
+
+- Build dianmic query stamen : sql = filter when runtime then we can add the property what we want 
+- It is call JPA specification = used when have Multiple filter 
+
+Ex:
+
+Specification<T> extends Serializable 
+Specification(JPA, relation, criteria, jpql….) 
+
+- Serializable អត់មានអីទេ គេបង្កើតអោយវាជាមេគេ
+- In order to implemete the Specification we create another class to implement from Specification
+
+Example: we want to do with Brand 
+
+1/ create class: BrandSpec in package spec
+
+- Incupculation 
+
+Search : JPA like ignore case 
+
+- Pagenation : we use custome url :
+
+localhost:8080/brands?name=o&id=3&_limit=10&_page=2

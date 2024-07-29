@@ -1,0 +1,24 @@
+Week 5 Unit Test
+
+Unit Test: we testing one by one
+
+- Controller : API End Point 
+- Service : Business logic 
+- repository : communication with DB
+
+
+===> Code Coverage need 90% up : right click then Coverage As = Unit Test
+
+
+----------- Test have Two type :
+
+1. Unit Test : Developer 
+2. Integration Test : Person (QA doing it) 
+
+Note: when compile then it error from unit test: 
+
+Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:2.22.2:test (default-test) on project phoneshope-night: There are test failures.
+
+
+* maven skip test command : mvn clean package -DskipTests
+
