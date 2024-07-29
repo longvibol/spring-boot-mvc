@@ -18,3 +18,7 @@ Example: we want to do with Brand
 - Incupculation 
 
 Search : JPA like ignore case 
+
+- Pagenation : we use custome url :
+
+localhost:8080/brands?name=o&id=3&_limit=10&_page=2
