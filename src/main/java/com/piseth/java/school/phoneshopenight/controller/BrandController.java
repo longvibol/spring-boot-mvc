@@ -1,8 +1,6 @@
 package com.piseth.java.school.phoneshopenight.controller;
 
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,6 +27,7 @@ public class BrandController {
 	@Autowired
 	private BrandService brandService;
 	
+	// POST Method 
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> create(@RequestBody BrandDTO brandDTO) {
 		Brand brand = BrandMapper.INSTANCE.toBrand(brandDTO);
@@ -37,12 +36,14 @@ public class BrandController {
 		return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(brand));
 	}
 	
+	//GET BY ID
 	@GetMapping("{id}")
 	public ResponseEntity<?> getOneBrand(@PathVariable("id") Integer brandId){
 		Brand brand = brandService.getById(brandId);
 		return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(brand));
 	}
 	
+	//PUT Method 
 	@PutMapping("{id}")
 	public ResponseEntity<?> update(@PathVariable("id") Integer brandId, @RequestBody BrandDTO brandDTO){
 		Brand brand = BrandMapper.INSTANCE.toBrand(brandDTO);
@@ -50,6 +51,8 @@ public class BrandController {
 		return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(updatedBrand));
 	}
 	
+	
+	//GET Method GET Brands
 	@GetMapping
 	public ResponseEntity<?> getBrands(@RequestParam Map<String, String> params){
 		Page<Brand> page = brandService.getBrands(params);
