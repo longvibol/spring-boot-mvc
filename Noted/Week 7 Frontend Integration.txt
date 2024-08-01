@@ -1,0 +1,15 @@
+Week 7 Frontend Integration
+
+CMD: check install Node and ngular 
+>> node --version
+>> ng version
+
+----------
+
+Angular get start:
+
+* ng new NameOfTheProject
+
+1. npm run start
+2. Create Componete : CMD
+>> ng g c component/brand

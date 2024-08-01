@@ -1,0 +1,124 @@
+Week 8 Add Model Entity: 
+
+CROS : When other client call to the BE it will auto block by the Spring-Boot
+
+1- interface repository 
+2- service -> impl
+
+note: class to interface use: implementation 
+
+3- controller : rest ,request mapping , <?> decard in generic 
+
+/models is called relative part 
+
+-----------------------
+
+File in side Interface it is explicit : and this file are automation : static and final 
+Ex:
+ModelMapper INSTANCE = Mappers.getMapper(ModelMapper.class);
+
+INSTANCE is the field 
+
+
+--------------------- Mapming form Model to Brand 
+
+- In ModelDTO : have field (what we input from outside)
+
+1. BrandId 
+2. BrandName 
+
+- In model Entity have (in our database) 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	
+	private String name;
+	
+	@ManyToOne
+	@JoinColumn(name = "brandId")
+	private Brand brand; (where we want to mapping to the BrandId) 
+
+---- How to do it! យើងមិនអាច Save Model ដោយអត់មាន Brand បានទេ
+
+
+when want to know what we need to input from the Postman : we check BrandDTO 
+
+Error : 
+
+ERROR: insert or update on table "models" violates foreign key constraint "fk95s72g5hnsl3o0bqeuhnokdxu"
+  Detail: Key (brand_id)=(10) is not present in table "brands".
+
+- when input Model that don't have id from brand it should show: 404 not found but it show 500 Internal server Error ==> we need to change it: 
+
+
+NoteL
+
+Class<?> [] អាចថា អារេ នៃ class
+we want to convert from Integer to BrandId  :
+
+public Brand getById(Integer id) {
+		return brandRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Brand", id));
+	} 
+
+យើងបោះ Id from Brand ចូលវា ចេញមក Brand អោយយើង​
+
+---- ពេលជួបញ្ហានៅក្នង Mapstruct vir ot auto wire: Pointer is null be need to change in controller on ModelMapper 
+
+----- ពេលយើងចង់ទាញ Id from Object ស្រួលតេ តែពេលមាន id ចង់បាប់ Object បានពិបាក
+
+
+Single reponsibilty (យើងផ្តាល់ Mapper ចេញពី service) 
+
+when we are working have two king
+
+Save DTO then Show at outside DTO 
+Save Model then convert to DTO 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
