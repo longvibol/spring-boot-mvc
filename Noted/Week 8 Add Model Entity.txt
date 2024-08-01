@@ -75,6 +75,11 @@ when we are working have two king
 Save DTO then Show at outside DTO 
 Save Model then convert to DTO 
 
+--------------
+
+Maindetatry ជារបស់ត្រូវតែមាន ចឹងសម្រាប់ field យើងដាក់ជា Contructor ចឹងត្រូវបង្កើត file neng ory vir tov cher final 
+and add @RequireArgSContructor 
+
 
 
 
