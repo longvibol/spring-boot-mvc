@@ -1,0 +1,17 @@
+Week8 Swagger
+
+- Annotation-specified bean name 'modelMapperImpl' for bean class [springfox.documentation.swagger2.mappers.ModelMapperImpl] conflicts with existing, non-compatible bean 
+
+ជាន់ឈ្មោះ class ដូចគ្នាចឹងយើងត្រូវកែ class name ចេញ។
+
+---------------------------
+
+Caused by: java.lang.NullPointerException: Cannot invoke "org.springframework.web.servlet.mvc.condition.PatternsRequestCondition.getPatterns()" because "this.condition" is null
+
+-
+
+Install plugin STS elcip, STS spring tool shout Lombok pulin 
+
+Pox. 1.18.30 , Lombok plugin need the same version 
+
+-- Query have two: Raw query or JPQL

@@ -5,13 +5,12 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import com.piseth.java.school.phoneshopenight.dto.ModelDTO;
-import com.piseth.java.school.phoneshopenight.entity.Brand;
 import com.piseth.java.school.phoneshopenight.entity.Model;
 import com.piseth.java.school.phoneshopenight.service.BrandService;
 
 @Mapper(componentModel = "spring" , uses = {BrandService.class})
-public interface ModelMapper {
-	ModelMapper INSTANCE = Mappers.getMapper(ModelMapper.class);
+public interface ModelEntityMapper {
+	ModelEntityMapper INSTANCE = Mappers.getMapper(ModelEntityMapper.class);
 	
 	// Target is Model 
 	// Source is ModelDTO
