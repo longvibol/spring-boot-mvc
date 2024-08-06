@@ -1,0 +1,149 @@
+Week 10 Liquibase
+
+- Liquibase សម្រាប់ generate table , សម្រាប់ដាក់ Data ចូលក្នុង Table ​របស់យើង
+- In real practice we need to know who input the data and change something 
+
+
+-- Delete query
+
+drop table models
+drop table brands
+
+-------------- liquibase tutorial: 
+
+https://docs.liquibase.com/start/get-started/liquibase-sql.html
+
+
+https://www.baeldung.com/liquibase-refactor-schema-of-java-app
+
+
+=========================================================
+
+
+https://docs.liquibase.com/change-types/create-table.html#yaml_example
+
+
+
+
+------------------- Step to create liquibase 
+1. Import dependacy 
+
+<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+		</dependency>
+
+2. applicaton.yml : configure liquibase (crate master liquipbase) 
+
+  liquibase:
+    change-log: classpath:db/changlog/db.changelog-master.yml 
+
+3. create folder data liquipbase 
+
+3-1: Master: 
+
+databaseChangeLog:
+  - include:
+    - file: db/changelog/001_init_db_structure.yml 
+
+3-2: subfolder where we create table from liquipbase
+
+databaseChangeLog:
+- changeSet:
+    id: 001_init_db_structure
+    author: vibollong@gmail.com
+    changes:
+    - createTable:
+        tableName: brands
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+            name: brand_id
+            type: BIGINT
+        - column:
+            name: brand_name
+            type: VARCHAR(50)
+
+#-------------------------------------------- Crate On table brands 
+
+    - createTable:
+        tableName: models
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+            name: id
+            type: BIGINT
+        - column:
+            name: name
+            type: VARCHAR(50)
+        - column:
+            name: brand_id
+            type: BIGINT
+            constraints:
+              - foreignKeyName: fk_models_brands
+                references: brands(brand_id)
+				
+				
+#-------------------------------------------- Crate On table Models where brand_id is the foriegn key from Brand  (java interger to liquipbase datatype)
+
+
+                
+-----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
