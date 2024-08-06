@@ -1,0 +1,137 @@
+Week 6 Unit Test Mock:
+
+- Tesing with Service Layer with Mock 
+
+Note: 
+
+Inside repository Spring វានាក់បង្កើតអោយយើង but in the service we create our oun service that why we need to 
+create Implementation by ourselves!
+
+Example : 
+
+@Service
+public class BrandServiceImpl implements BrandService{
+	@Autowired
+	private BrandRepository brandRepository;
+
+We can see it have repository "private BrandRepository brandRepository;" inside so we need to skip this testing 
+by using Mock (យើងសន្និមតថាន រាល់ Method inside brandRepository are testing already)
+
+==> we test only our service inside Implement របស់យើងនៅក្នុង Service ។
+
+-------------------------------------------------------
+
+Example :
+Service 
+
+
+@Override
+	public Brand create(Brand brand) { 
+		return brandRepository.save(brand);
+	}
+
+
+មាន service : brandRepository.save(brand) : so we Mock it (expect it is working find) 
+
+------------------- Set up start 
+
+Note:
+
+<S extends T> S save(S entity);
+
+- S is the Object Type we want to create 
+- T is the extend object 
++ <S extends T> = declear Generic 
+
+មានន័យថា Method : save ពេលយើងបោះ Object : S ចូល វានឹង Return Object : S នឹងមកវិញ
+
+Noted : 
+
+- @RequiredArgsConstructor គឺយើងយកតែ file ណាដែលជា finial ដាក់ជា contractor នៅក្នុង class នឹង
+- contractor គឺពេលយើងបង្កើត Object ដោយយក class នឹងគឺត្រូវតែមាន file នឹងដាក់បញ្ចូលមក
+- invoked = called 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

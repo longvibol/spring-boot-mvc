@@ -29,7 +29,7 @@ public class BrandRepositoryTest {
 		
 		
 		Brand brand2 = new Brand();
-		brand2.setName("SAmsung");
+		brand2.setName("Samsung");
 		
 		
 		brandRepository.save(brand);
@@ -41,11 +41,22 @@ public class BrandRepositoryTest {
 		
 		// then 
 	
-		assertEquals(2, brands.size());
+		assertEquals(1, brands.size());
 		assertEquals("Apple", brands.get(0).getName()); // get inside list of brand index 0 = Apple  
 		assertEquals(1, brands.get(0).getId()); // have id 1 
+		
+		// Test With findByNameContaining : 
+		
+		
+		List<Brand> brandsContain = brandRepository.findByNameContaining("A");
+		
+		assertEquals(1, brandsContain.size());
+		assertEquals("Apple", brandsContain.get(0).getName()); 
+		assertEquals(1, brandsContain.get(0).getId());  
+		
+		
 	}
-
+	
 }
 
 
