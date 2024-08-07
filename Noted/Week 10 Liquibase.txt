@@ -92,7 +92,63 @@ databaseChangeLog:
 
 
                 
------------------------------------------
+----------------------------------------- 
+Use Jap to generate Schema in Liquibase 
+
+
+1. Add Plugin Liquibase 
+
+<plugin>
+					<groupId>org.liquibase</groupId>
+					<artifactId>liquibase-maven-plugin</artifactId>
+					<configuration>
+						<propertyFile>src/main/resources/liquibase.properties</propertyFile>
+					</configuration>
+				</plugin>
+
+
+2. Add property as the name in plugin 
+>> dir >> src/main/src/main/resources. then create file name " liquibase.properties" 
+
+'''
+
+url=jdbc:postgresql://localhost:5432/phoneshopmvc
+username=phoneshopmvc
+password=admin
+driver=org.postgresql.Driver
+outputChangeLogFile=src/main/resources/liquibase-outputChangeLog.yml
+
+'''
+
+3. use command to generate 
+
+>> mvn liquibase:generateChangeLog
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
