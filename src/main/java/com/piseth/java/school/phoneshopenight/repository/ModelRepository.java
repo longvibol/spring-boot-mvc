@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 import com.piseth.java.school.phoneshopenight.entity.Model;
 
 @Repository
-public interface ModelRepository extends JpaRepository<Model, Integer>{
+public interface ModelRepository extends JpaRepository<Model, Long>{
 	
 	
-	List<Model> findByBrandId(Integer brandid);
+	List<Model> findByBrandId(Long brandid);
 	
 }

@@ -14,4 +14,4 @@ spring:
       matching-strategy: ANT_PATH_MATCHER
   liquibase:
         change-log: classpath:db/changelog/db.changelog-master.yaml
-        enabled: true
+        enabled: false

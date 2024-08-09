@@ -82,16 +82,16 @@ public class BrandServiceTest {
 		//Given
 		
 		Brand brand = new Brand();
-		brand.setId(1);
+		brand.setId((long) 1);
 		brand.setName("Apple");
 		
 		
 		// When
 		// 1 Mock
-		when(brandRepository.findById(1)).thenReturn(Optional.of(brand));
+		when(brandRepository.findById(1L)).thenReturn(Optional.of(brand));
 		 
 		// 2 call our service to test		
-		Brand returnBrand = brandService.getById(1);
+		Brand returnBrand = brandService.getById(1L);
 		
 		
 		//then
@@ -103,11 +103,11 @@ public class BrandServiceTest {
 	
 	@Test
 	public void testgetByIdFail() {
-		when(brandRepository.findById(2)).thenReturn(Optional.empty()); // to make the Expection Call Method in our class
+		when(brandRepository.findById(2L)).thenReturn(Optional.empty()); // to make the Expection Call Method in our class
 		
 		// Call our method to test
 		
-		assertThatThrownBy(() -> brandService.getById(2))
+		assertThatThrownBy(() -> brandService.getById(2L))
 			.isInstanceOf(ResourceNotFoundException.class)
 			.hasMessage(String.format("%s With id = %d not found","Brand", 2 ));
 //			.hasMessageEndingWith("not found");
