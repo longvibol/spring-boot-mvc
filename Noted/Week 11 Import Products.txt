@@ -1,0 +1,224 @@
+Week 11: Import Products
+
+-Import product
+-set sale price 
+
+
+------------------------- Import product (DTO :data transfter Object)
+need to have field 
+
+- productId
+- importUnit
+- importPrice
+- importDate
+
+
+1. Define DTO: ProductImportDTO
+
+@Data
+public class ProductImport {
+	
+	private Long productId;
+	private Integer importUnit;
+	private BigDecimal importPrice;
+	private LocalDateTime importDate;
+	
+
+}
+
+2. What next we thing about what is the effect to the other table 
+
+- product 
+- productHistory 
+
+So we need to defind from product Service ?
+
+Inside the Product Service : we create function or API to import the product:
+
+void importProduct();
+
+3. we want to save product and productHistory (where when the productImport effected) 
+
+- create Implement : 
+
+public interface ProductImportHistoryRepository extends JpaRepository<ProductImportHistoryRepository, Long>
+{
+	
+
+}
+
+
+- ProductService: 
+
+@Override
+	public void importProduct(ProductImportDTO importDTO) {
+		
+		// we want to devide the importProduct into two table product and product import history
+		
+		// save product
+		
+		
+		// save product import history 
+		
+	}
+
+
+------------------------------------------------------------
+
+ពេលយើង Import ចំនួននៅក្នុង Stock ត្រូវបានផ្លាស់ប្តូរ
+
+
+- Before we sale we set the sale price 
+
+---- Add validation : Hibernet អ្នកធ្វើ
+
+<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+		</dependency>
+
+
+example: 
+
+@Data
+public class ProductImportDTO {
+	@NotNull(message = "Product id can't be null")
+	private Long productId;
+	
+	@Min(value = 1, message = "import unit must be greater than 0")
+	private Integer importUnit;
+	
+	@DecimalMin(value = "0.000001", message = "Price must be greater than 0")
+	private BigDecimal importPrice;
+	
+	@NotNull(message = "Import date can't be null")
+	private LocalDate importDate;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

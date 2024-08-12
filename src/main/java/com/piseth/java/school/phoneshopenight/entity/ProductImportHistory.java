@@ -1,7 +1,7 @@
 package com.piseth.java.school.phoneshopenight.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,7 +25,7 @@ public class ProductImportHistory {
 	
 	
 	@Column(name = "date_import")
-	private LocalDateTime dateImport;
+	private LocalDate dateImport;
 	
 	@Column(name = "import_unit")
 	private Integer importUnit;	
