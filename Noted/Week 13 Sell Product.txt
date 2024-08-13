@@ -1,0 +1,69 @@
+Week 13 Sell Product : 
+
+- Set sale price : Create Controller 
+
+POST: 	products/ 	=> create
+GET:	products/ 	=> list
+GET:	products/23	=> get by id
+PUT:	products/25	=> update
+DELETE: products/23	=> delete
+
+POST:	products/importProduct => import product
+POST:	products/25/setSalePrice => set sale to specific product 
+
+----------------------------------------------------------------
+
+sell: Controller 
+
+POST: sales/
+request body:
+
+{
+
+	"products" :[
+		{
+		
+			"productid" : Long,
+			"numberOfUnit: int,	
+		
+		},
+
+		{
+		
+			"productid" : Long,
+			"numberOfUnit: int,	
+		
+		}		
+			],
+	"saleDate" : DateTime
+
+}
+
+
+
+
+
+
+
+
+
+
+Homework: 
+
+1- unit test set sale price
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
