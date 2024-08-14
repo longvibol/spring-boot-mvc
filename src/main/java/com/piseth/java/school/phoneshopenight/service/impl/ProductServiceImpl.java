@@ -74,6 +74,13 @@ public class ProductServiceImpl implements ProductService {
 		productRepository.save(product);
 	}
 
+	@Override
+	public void validateStock(Long productId, Integer numberOfUnit) {
+		
+		
+		
+	}
+
 }
 
 

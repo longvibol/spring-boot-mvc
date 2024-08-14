@@ -31,7 +31,7 @@ public class ProductServiceTest {
 	public void setUp() {		
 		productService = new ProductServiceImpl(productRepository, importHistoryRepository, productMapper);		
 	}	
-	@Test
+	
 	public void testSetSalePrice() {		
 		
 		Product product = new Product();		

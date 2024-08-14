@@ -39,15 +39,6 @@ request body:
 
 }
 
-
-
-
-
-
-
-
-
-
 Homework: 
 
 1- unit test set sale price

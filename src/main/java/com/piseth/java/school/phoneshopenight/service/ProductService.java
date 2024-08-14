@@ -17,5 +17,8 @@ public interface ProductService {
 	void setSalePrice(Long productId, BigDecimal price);
 	
 	
+	void validateStock(Long productId, Integer numberOfUnit);
+	
+	
 	
 }
