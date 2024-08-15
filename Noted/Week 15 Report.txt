@@ -1,0 +1,29 @@
+Week 15 Report; 
+
+there are many to create report but we in this course: 
+
+We use Projection and JPA 
+
+Daily report: what we want to know :
+
+- productid, productName, unit, totalAmout
+what we need to ask : 
+
+- where is the function we want to create 
+- what is the controller api (which controller and parameter)
+
++ We want to group all our report ==> create new controller 
+ReportController ("/reports")
+
+GET: productSold?startDate=2023-09-09&endDate=.... or
+
+productSold/{startDate}/{endDate}/product="name"
+
+
+------------- Key word
+
+- Projection package : we want to get only what we want from the class : example in the products have many 
+field but we want to get only product name, and other like sale or sale detail we want only sale id or something ...
+
+
+
