@@ -1,0 +1,53 @@
+Week 14 Upload Excel
+
+1. Create excel file
+
+
+2. add dependency 
+
+<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>5.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.2.0</version>
+		</dependency>
+
+
+3. Create controller upload file 
+
+4. create server to handel service upload file 
+
+@Override
+	public void uploadProduct(MultipartFile file) {
+		Workbook workbook = new XSSFWorkbook();
+		
+	}
+
+note :
+
+Workbook is the interface ចឹងយើងត្រូវ crate new object by implements from the Workbook implementation 
+
+-- not blide guess but it is aducation guess 
+
+-------------------------------------------- 
+Iterator<Row> iterator = sheet.iterator();
+
+នៅក្នុង iterator it have two method : HasNext (return boolend) and Next
+
+
+
+
+
+
+
+
+
+
+
+
+
+
