@@ -26,7 +26,9 @@ public class Sale {
 	private Long id;
 	
 	@Column(name = "sold_date")
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime soldDate;
+	
+	
+	@Column(name = "active")
+	private Boolean active;
 }

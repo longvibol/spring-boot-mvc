@@ -1,0 +1,95 @@
+Week 15- Cancel Sale 
+
+- Validate sale price before sale 
+- cancel sale 
+
+
+-------------------------- Design Controller 
+
+1. PUT : sales/{saleId}/cancel
+
+What effect to the table :
+
+-tb sale : change status (we update flac statud from true to fale (យើងមិនយក Satus ណាដែលមាន statu fale ​ទៅ
+ធ្វើការ update report នោះទេ
+ 
+-tb product : update stock
+
+-------------------- 
+
+2. GET : /sales/{sales} - to get view sales id we have sold 
+
+3. PUT : /sales/{sales} - to Update sale with saleId
+
+
+------------ **** NOted **
+
+in the file 
+
+private Boolean active; we need to put big letter on Boolean 
+becaue boolean in small letter it is premative(don't have null) 
+
+
+---------------- Report 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+select * from product_import_histories
+
+select * from sales
+
+select * from sale_details
+
+select * from products
+
+
+-
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

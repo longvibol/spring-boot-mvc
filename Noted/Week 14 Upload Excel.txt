@@ -38,6 +38,37 @@ Iterator<Row> iterator = sheet.iterator();
 
 នៅក្នុង iterator it have two method : HasNext (return boolend) and Next
 
+========================= Create local date time : spring boot localdatetime format
+
+https://www.springcloud.io/post/2022-09/springboot-date-format/#gsc.tab=0
+
+We put it into configuration :
+
+@Configuration
+public class JacksonConfiguration {
+
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
+        
+        return builder -> {
+            
+            // formatter
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter dateTimeFormatter =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            
+            // deserializers
+            builder.deserializers(new LocalDateDeserializer(dateFormatter));
+            builder.deserializers(new LocalDateTimeDeserializer(dateTimeFormatter));
+            
+            // serializers
+            builder.serializers(new LocalDateSerializer(dateFormatter));
+            builder.serializers(new LocalDateTimeSerializer(dateTimeFormatter));
+        };
+    }
+}
+
+so we no need to put format in each field: 
+
 
 
 
