@@ -26,4 +26,30 @@ productSold/{startDate}/{endDate}/product="name"
 field but we want to get only product name, and other like sale or sale detail we want only sale id or something ...
 
 
+---------------
+
+Aggreaget function we no need to put inside the Group by. we can put in the select: 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

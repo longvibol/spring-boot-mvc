@@ -1,0 +1,13 @@
+Week 16 Report With Programming 
+
+- Raw qureey it is easy but deffical to read from our team 
+- Programing easy to read and handld for the team 
+
+
+---------------------- model Generator 
+
+Sale_ (it call : hibernet model or model generator) 
+
+le = less than or equial = " <= " 
+
+lt = less than = " < "
