@@ -30,8 +30,6 @@ public class ProductImportHistory {
 	
 	
 	@Column(name = "date_import")
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime dateImport;
 	
 	@Column(name = "import_unit")

@@ -91,66 +91,69 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Map<Integer, String> uploadProduct(MultipartFile file) {
-		Map<Integer, String> map = new HashedMap();
+		Map<Integer, String> map = new HashedMap<>();
 		try {
 			Workbook workbook = new XSSFWorkbook(file.getInputStream());
 			Sheet sheet = workbook.getSheet("products");
 			Iterator<Row> rowIterator = sheet.iterator();
-
+			
 			rowIterator.next(); // @TODO improve checking error
-
-			while (rowIterator.hasNext()) {
+			
+			while(rowIterator.hasNext()) {
 				Integer rowNumber = 0;
 				try {
 					Row row = rowIterator.next();
 					int cellIndex = 0;
-
+					
 					Cell cellNo = row.getCell(cellIndex++);
+					
+					System.out.println("cell Number is: "+cellNo);
+					
 					rowNumber = (int) cellNo.getNumericCellValue();
-
+					
 					Cell cellModelId = row.getCell(cellIndex++);
-					Long modelId = (long) cellModelId.getNumericCellValue();
-
-					Cell cellColorId = row.getCell(cellIndex++);
-					Long colorId = (long) cellColorId.getNumericCellValue();
-
+					Long modelId =  (long) cellModelId.getNumericCellValue();
+					
+					Cell cellColorId = row.getCell(cellIndex++); 
+					Long colorId =  (long) cellColorId.getNumericCellValue();
+					
 					Cell cellImportPrice = row.getCell(cellIndex++);
-					Double importPrice = cellImportPrice.getNumericCellValue();
-
+					Double importPrice =  cellImportPrice.getNumericCellValue();
+					
 					Cell cellImportUnit = row.getCell(cellIndex++);
-					Integer importUnit = (int) cellImportUnit.getNumericCellValue();
-					if (importUnit < 1) {
+					Integer importUnit =  (int) cellImportUnit.getNumericCellValue();
+					if(importUnit < 1) {
 						throw new ApiException(HttpStatus.BAD_REQUEST, "Unit must be greater than 0");
 					}
-
+					
 					Cell cellImportDate = row.getCell(cellIndex++);
 					LocalDateTime importDate = cellImportDate.getLocalDateTimeCellValue();
-
+					
 					Product product = getByModelIdAndColorId(modelId, colorId);
-
-					// System.out.println(modelId);
+					
+					
+					//System.out.println(modelId);
 					Integer availableUnit = 0;
-					if (product.getAvailableUnit() != null) {
+					if(product.getAvailableUnit() != null) {
 						availableUnit = product.getAvailableUnit();
 					}
 					product.setAvailableUnit(availableUnit + importUnit);
 					productRepository.save(product);
-
+					
 					// save product import history
-					// ProductImportHistory importHistory =
-					// productMapper.toProductImportHistory(importDTO, product);
+					//ProductImportHistory importHistory = productMapper.toProductImportHistory(importDTO, product);
 					ProductImportHistory importHistory = new ProductImportHistory();
 					importHistory.setDateImport(importDate);
 					importHistory.setImportUnit(importUnit);
 					importHistory.setPricePerUnit(BigDecimal.valueOf(importPrice));
 					importHistory.setProduct(product);
 					importHistoryRepository.save(importHistory);
-				} catch (Exception e) {
+				}catch(Exception e) {
 					map.put(rowNumber, e.getMessage());
 				}
-
+				
 			}
-
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
