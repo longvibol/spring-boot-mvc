@@ -33,42 +33,20 @@ becaue boolean in small letter it is premative(don't have null)
 ---------------- Report 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-select * from product_import_histories
-
 select * from sales
 
 select * from sale_details
 
+
 select * from products
 
+select * from models
 
--
+select * from brands
 
+select * from colors
 
-
-
+select * from product_import_histories
 
 
 

@@ -3,10 +3,8 @@ package com.piseth.java.school.phoneshopenight.service.impl;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Optional;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -40,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Product create(Product product) {
-		String name = "%s %s".formatted(product.getModel().getName(), product.getColor().getName());
+		String name = "%s %s".formatted(product.getModel().getName(), product.getColor().getColor_name());
 		product.setName(name);
 
 		return productRepository.save(product);

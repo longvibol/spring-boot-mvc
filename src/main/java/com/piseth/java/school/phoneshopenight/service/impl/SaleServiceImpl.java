@@ -31,8 +31,6 @@ public class SaleServiceImpl implements SaleService {
 	private final ProductRepository productRepository;
 	private final SaleRepository saleRepository;
 	private final SaleDetailRepository saleDetailRepository;
-	
-	private List<Long> list;
 
 	@Override
 	public void sell(SaleDTO saleDTO) {
@@ -108,26 +106,6 @@ public class SaleServiceImpl implements SaleService {
 		});
 	}
 
-	private void validate2(SaleDTO saleDTO) {
-		List<Long> productIds = saleDTO.getProducts().stream().map(ProductSoldDTO::getProductId).toList();
-		// validate on product: this step mean we can get the id from DB
-		productIds.forEach(productService::getById);		
-		// we want to get all iteam in db where our id input 
-		List<Product> products = productRepository.findAllById(productIds); 
-		// we convert to Map then we can get the Id :: Value		
-		Map<Long, Product> productMap = products.stream()
-			.collect(Collectors.toMap(Product::getId, Function.identity() ));		
-		// from this Id we can get the product what we want 	
-		// validate on stock
-		saleDTO.getProducts().forEach(ps -> {			
-			// we want to compare the product Unit to ProductSaleDTO :aviable unit			
-			Product product = productMap.get(ps.getProductId());			
-			if(product.getAvailableUnit() < ps.getNumberOfunit()) {
-				throw new ApiException(HttpStatus.BAD_REQUEST, 
-						"Product [%s] Not enough product in stock!".formatted(product.getName()));
-			}
-		});
-	}
 
 	@Override
 	public void cancelSale(Long saleId) {
