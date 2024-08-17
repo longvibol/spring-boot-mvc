@@ -1,7 +1,7 @@
 Week 16 Report With Programming 
 
 - Raw qureey it is easy but deffical to read from our team 
-- Programing easy to read and handld for the team 
+- Programing easy to read and handld for the team, support many data base someting in Oracel db it don't have queurey methond so Programing is better.  
 
 
 ---------------------- model Generator 
@@ -11,3 +11,240 @@ Sale_ (it call : hibernet model or model generator)
 le = less than or equial = " <= " 
 
 lt = less than = " < "
+
+---------------------------------------
+
+
+How to create specification :
+
+1. ត្រូវរកមើល entity មួយណាដែលយើងចង់ធ្វើ filter លើវា ចឹងយក SaleDetail ព្រោះវាមានពត័មានដែលយើងចង់បានសម្រាប់ថ្វើ
+របាយការណ៍
+
+public class SaleDetailSpec implements Specification<SaleDetail>{
+	// We want to build our own customer criterial startdate , price or etc ... from SaleDetail 
+	
+	private SaleDetailFilter detailFilter;	
+
+	@Override
+	public Predicate toPredicate(Root<SaleDetail> saleDetail, CriteriaQuery<?> query, CriteriaBuilder cb) {
+
+}
+
+- class name : SaleDetailSpec យើងត្រូវធ្វើការ implement from Specification<SaleDetail> 
+- ទាញ យក object SaleDetailFilter detailFilter មកប្រើ អ្វីដែលយើងចង់ធ្វើការ filter 
+==> inside SaleDetailFilter : we have startDate and EndDate ដែលយើងចង់ធ្វើការ filter វា​
+
+
+2. We implement override methos one from specification :
+
+@Override
+	public Predicate toPredicate(Root<SaleDetail> saleDetail, CriteriaQuery<?> query, CriteriaBuilder cb) {
+		}
+
+inside that we can create our own custom filter ហើយអ្វីដែលយើងចង់ return វាវិញជា​List Predicate (មានឬអត់)
+
+ចឹងបានយើងបង្កើត៖
+
+List<Predicate> predicates = new ArrayList<>(); // we want to get the correct cb then we add to the array list 
+
+3. inside saleDetail it have object Sale អ្វីដែលយើងត្រូវធ្វើការចង់ colum ជាមួយគ្នា 
+
+- Join<SaleDetail, Sale> sale = saleDetail.join("sale");
+
+- ចំនុចសំខាន់ គឺអ្វីដែលយើងចង់ធ្វើរបាយការណ៍ ចឹងយើងត្រូវស្វែងរក និងប្រៀបធៀប ទិន្នន័យដែលយើងបញ្ចូលមក​នឹង ដែលមាន Object មួយឈ្មោះថា 
+Root<SaleDetail> ដែលវាជា Generic នៃ Object SaleDatail ដែលយើងត្រូវស្វែងរកនឹង
+
+- បើសិនគេបញ្ចូលមកនឹងហើយវាមាន អោយវា ដាក់ចូលក្នុង list of predicate នឹងទៅ
+
+	if(Objects.nonNull(detailFilter.getStartDate())){
+			
+			cb.greaterThanOrEqualTo(sale.get("soldDate"), detailFilter.getStartDate());
+			//soldDate is the filed inside Sale
+	យើង filter វាថា បើថ្ងៃលក់នឹងវាមានអោយមាន ហើយដូចទៅថ្ងៃដែលគេបានបញ្ចូលនឹង អោយវា return true or flase មក
+		}
+		
+		if(Objects.nonNull(detailFilter.getEndDate())){
+			
+			cb.lessThanOrEqualTo(sale.get("soldDate"), detailFilter.getEndDate());
+		}
+		
+		// we have list then want to convert to Array 
+		Predicate predicate = cb.and(predicates.toArray(Predicate[]::new));
+
+		បន្ទាប់មក​ យើងយក Cb ដែលយើងមាននឹង ដាក់ចូលក្នុង កញ្ចប់ ដែលមាននឹង List<Predicate> predicates
+
+4. ពេលអ្វីដែលយើងចង់បាននឹងហើយ យើងចង់បានទិន្នន៏យដែលត្រូវនឹង អ្វីដែលយើងបានដាក់ចូលក្នុង List​ នឹងចឹងយើងត្រូវ រក្សាទុកវាក្នុង
+Map<> ដោយសារតែ តាមរយៈ true id ដែលយើងបានមកនឹង យើងនឹងធ្វើការ ភ្ជាប់នឹង ទាញ Value នឹងមក​
+
+Search: how to convert from list to array !
+
+
+5. 
+------------------- Next we will working on SaleRepository and we put our cb specification to find from DB
+
+in Class SaleDetailRepository we extendd 
+
+- when we add : @AllArgsConstructor មានន័យថា contractor ដែលមាន Parameter 
+ចឹង Specification<SaleDetail> spec = new SaleDetailSpec(); វាត្រូវការ parameter ទៀតបានវាអោយបង្កើតបាន
+== > ដោយសារតែនៅក្នុង SaleDetailSpce វាមាន​ private SaleDetailFilter detailFilter;
+
+ចឹងយើងត្រូវ set វានៅក្នុង ReportServiceImple មួយទៀត ព្រោះយើងយក Specification<SaleDetail> spec = new SaleDetailSpec();
+
+@Override
+	public List<ProductReportDTO> getProductReport(LocalDate startDate, LocalDate endDate) {
+		
+		SaleDetailFilter saleDetailFilter = new SaleDetailFilter();
+		
+		saleDetailFilter.setStartDate(startDate);
+		saleDetailFilter.setEndDate(endDate);
+		
+		Specification<SaleDetail> spec = new SaleDetailSpec(saleDetailFilter);
+		
+		detailRepository.findAll(spec);
+		
+		return null;
+	}
+
+
+productid, productName, unit , totalAmout 
+
+BigDecimal is the object we can do multipul with integer 
+
+
+--------------------------
+
+Type Saft : we want to use it because when the run time we can see the error 
+
+==> therefore we use Model Generator (ModelGen: it is from hibernet)
+
+Search Keyword: Criteria Queries Using JPA Metamodel or hibernate modelgen example
+
+
+1. Add dependacy
+
+
+<dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-jpamodelgen</artifactId>
+    <version>6.1.7.Final</version>
+</dependency>
+
+
+---------- after update and compile it will create entity or table ory yerng 
+
+https://www.baeldung.com/hibernate-criteria-queries-metamodel
+
+
+
+
+
+		
+
+		 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
