@@ -42,4 +42,13 @@ public class ReportController {
 
 		return ResponseEntity.ok(productSolds);
 	}
+	
+	@GetMapping("/expend/{startDate}/{endDate}")
+	public ResponseEntity<?> expenseReport(@DateTimeFormat(pattern = "yyyy-MM-dd") @PathVariable("startDate") LocalDate startDate,
+			@DateTimeFormat(pattern = "yyyy-MM-dd") @PathVariable("endDate") LocalDate endDate){
+		
+		List<ProductReportDTO> productSolds = reportService.getProductReport(startDate,endDate);
+
+		return ResponseEntity.ok(productSolds);
+	}
 }

@@ -1,0 +1,15 @@
+week 17 Expense Report :
+
+Fist we find with entity that have information we want to do the report : 
+
+- productImportHistories:what we should put 
+
+==> startDate, endDate
+
+1-12-2024 : 31-13-2024
+
+productid, productName,total unit, total Amount
+
+1, iPhone 14 pro, 40 ,4000$
+
+
