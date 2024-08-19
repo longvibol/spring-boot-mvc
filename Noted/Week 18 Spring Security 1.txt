@@ -1,0 +1,81 @@
+Week 18 Spring Security 1
+
+1. Add dependency 
+
+<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+-- go to spring inizilaizer 
+
+add spring security 
+
+2. build package >> Password login 
+-uer
+- password will generator from running line : Using generated security password: e4aa1a3a-eb62-4830-854b-bd1d36b6f356
+
+==> then we can login buy Brower 
+
+2. logout: http://localhost:8080/logout
+
+
+3. Setup White list : home page 
+
+
+- Deprecated: មានន័យថាវានឹងលែង support នៅ version ក្រោយ
+Keyword to search: 
+
++ How to replace spring security :webSercurityConfiguerAdapter
+
+** 
+public class SecurityConfig extends WebSecurityConfigurerAdapter{
+	
+	យើង Ctrl + Space មកវានឹងបង្ហាថាមាន Overide method អ្វីខ្លះដែលអាចអោយយើងប្រើបានហើយ
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
