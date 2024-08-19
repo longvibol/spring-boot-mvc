@@ -1,3 +1,154 @@
 Week 17 Unite Test on Service : Report 
 
+1. What we want to test : ReportService testing : need to Mock on Repositoy 
+- Mock on the repository 
+
+	@Mock
+	private  SaleRepository saleRepository;
+	@Mock
+	private  SaleDetailRepository detailRepository;
+	@Mock
+	private  ProductRepository productRepository;
+	@Mock
+	private  ProductImportHistoryRepository productImportHistoryRepository;
+
+
+
+
+- Initial the service by create the new object from the ReportService :
+
+@BeforeEach
+	public void setUp() {
+		reportService = new ReportServiceImpl(saleRepository, detailRepository, productRepository, productImportHistoryRepository);
+	}
+
+2. Checkinside the serviceImple in order to setup the relatevie service :  
+
+
+
+		//when : productImportHistoryRepository		
+		when(productImportHistoryRepository.findAll(Mockito.any(ProductImportHistorySpec.class)))
+				.thenReturn(importHistories);
+		
+		//when : product
+		when(productRepository.findAllById(anySet())).thenReturn(products);	
+
+
+
+3. To make the Test have a clean code we create another Class: ReportTestHelper ==> helper To create Object 
+
+public class ReportTestHelper {
+	
+	private static Product product1 = Product.builder()
+			.id(1L)
+			.name("iphone 14 pro")
+			.build();
+	
+	private static Product product2 = Product.builder()
+			.id(2L)
+			.name("iphone 13 pro max")
+			.build();
+	
+	private static Product product3 = Product.builder()
+			.id(2L)
+			.name("samsung galaxy s10")
+			.build();
+	
+	public static List<Product> getProducts(){
+		return List.of(product1,product2);
+	}
+	
+	public static List<ProductImportHistory> getProductImportHistories(){
+		
+		ProductImportHistory history1 = ProductImportHistory.builder()
+				.product(product1)
+				.importUnit(3)
+				.pricePerUnit(BigDecimal.valueOf(1000))
+				.dateImport(LocalDateTime.of(2024, 1, 1, 12, 50))
+				.build();
+		
+		ProductImportHistory history2 = ProductImportHistory.builder()
+				.product(product2)
+				.importUnit(2)
+				.pricePerUnit(BigDecimal.valueOf(700))
+				.dateImport(LocalDateTime.of(2024, 1, 5, 10, 20))
+				.build();
+		
+		ProductImportHistory history3 = ProductImportHistory.builder()
+				.product(product1)
+				.importUnit(5)
+				.pricePerUnit(BigDecimal.valueOf(2000))
+				.dateImport(LocalDateTime.of(2024, 1, 6, 11, 30))
+				.build();
+		
+		return List.of(history1,history2,history3);
+	}
+
+}
+
+
+=================== Note on each iteam testing we need to setup the order report first: By sorting ExpenseReportDTOs : It it not correct we need to change on order back: 
+
+
+//short by id
+			Collections.sort(expenseReportDTOs, (a,b) -> (int)(a.getProductId() - b.getProductId()));
+
+
+====================== Call for testing service 
+
+// our service test
+		
+		List<ExpenseReportDTO> expenseReports = reportService.getExpenseReport(LocalDate.now().minusMonths(1), LocalDate.now());
+		
+		//then
+		assertEquals(2, expenseReports.size());
+		ExpenseReportDTO expense1 = expenseReports.get(0);
+		
+		assertEquals(1, expense1.getProductId());
+		assertEquals("iphone 14 pro", expense1.getProductName());
+		assertEquals(8, expense1.getTotalUnit());
+		assertEquals(13000, expense1.getTotalAmout().doubleValue());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
