@@ -142,21 +142,32 @@ public class ReportServiceImpl implements ReportService{
 		
 //		List<ExpenseReportDTO> expenseReportDTO = new ArrayList<>();
 		
-		var expenseReportDTOs = new ArrayList<>();
+		var expenseReportDTOs = new ArrayList<ExpenseReportDTO>();
 
 		for (var entry : importMap.entrySet()) {
 			//want to get product name			
 			Product product = productMap.get(entry.getKey().getId());
 			
+			//totalUnit = each email sum together 
+			
+			List<ProductImportHistory> importProducts = entry.getValue();
+			
+			int totalUnit = importProducts.stream().mapToInt(pi -> pi.getImportUnit()).sum();
+			
+			double totalAmount = importProducts.stream()
+				.mapToDouble(pi -> pi.getImportUnit() * pi.getPricePerUnit().doubleValue())
+				.sum();
+			
+			
 			var expenseReportDTO = new ExpenseReportDTO();
 			expenseReportDTO.setProductId(product.getId());
 			expenseReportDTO.setProductName(product.getName());
-			expenseReportDTO.setTotalUnit(null);
-			
-			
+			expenseReportDTO.setTotalUnit(totalUnit);
+			expenseReportDTO.setTotalAmout(BigDecimal.valueOf(totalAmount));
+			expenseReportDTOs.add(expenseReportDTO);			
 		}
 		
-		return null;
+		return expenseReportDTOs;
 	}
 
 }

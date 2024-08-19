@@ -13,3 +13,18 @@ productid, productName,total unit, total Amount
 1, iPhone 14 pro, 40 ,4000$
 
 
+----------------------- Postman
+
+1. Expand
+
+localhost:8080/reports/expend/2024-08-01/2024-08-30
+
+2. Sold Product
+
+localhost:8080/reports/v2/2024-08-01/2024-08-30
+
+
+
+
+
+
