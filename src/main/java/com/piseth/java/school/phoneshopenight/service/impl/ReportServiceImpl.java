@@ -3,6 +3,7 @@ package com.piseth.java.school.phoneshopenight.service.impl;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -164,7 +165,11 @@ public class ReportServiceImpl implements ReportService{
 			expenseReportDTO.setProductName(product.getName());
 			expenseReportDTO.setTotalUnit(totalUnit);
 			expenseReportDTO.setTotalAmout(BigDecimal.valueOf(totalAmount));
-			expenseReportDTOs.add(expenseReportDTO);			
+			expenseReportDTOs.add(expenseReportDTO);	
+			
+			
+			//short by id
+			Collections.sort(expenseReportDTOs, (a,b) -> (int)(a.getProductId() - b.getProductId()));
 		}
 		
 		return expenseReportDTOs;
