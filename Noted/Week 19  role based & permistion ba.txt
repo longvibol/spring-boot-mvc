@@ -1,0 +1,6 @@
+Week 19 : role based & permistion based 
+
+
+- role based (SALE, admin, user...) 
+- permistion based (bands/ write, red, deleted)  
+

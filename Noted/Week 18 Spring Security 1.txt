@@ -35,6 +35,230 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 }
 
+---------------------------------------- Creaste configer 
+
+1. change from Form Base To Basic Authentication 
+
+@Override
+	protected void configure(HttpSecurity http) throws Exception {
+	
+		http.authorizeHttpRequests()
+			.anyRequest()
+			.authenticated()
+			.and()
+			.httpBasic();
+		
+	}
+
+-- in basic authenticate : login one time can use all : 
+
+
+2. add user authenticateion 
+
+- yellow in the Method is called " Protected Method" 
+- Blue color is Public Method. 
+
+******************** How to find method what we want ? 
+
+1. think what we want to do : create user login 
+2. Althernative : In Memory or Database 
+3. Fine Method to do it ( check the provide Method in main Method)
+
+Ctrl + space :
+
+@Override
+	protected UserDetailsService userDetailsService() {
+		// TODO Auto-generated method stub
+		return super.userDetailsService();
+	}
+
+- right click on "UserDetailsService" to see implementation ==> chose implementation from this interface 
+
+public interface UserDetailsService {
+
+	/**
+	 * Locates the user based on the username. In the actual implementation, the search
+	 * may possibly be case sensitive, or case insensitive depending on how the
+	 * implementation instance is configured. In this case, the <code>UserDetails</code>
+	 * object that comes back may have a username that is of a different case than what
+	 * was actually requested..
+	 * @param username the username identifying the user whose data is required.
+	 * @return a fully populated user record (never <code>null</code>)
+	 * @throws UsernameNotFoundException if the user could not be found or the user has no
+	 * GrantedAuthority
+	 */
+	UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+
+}
+
+អា interface នេះយើងត្រូវ Implement "UserDetails loadUserByUsername(String username) throws UsernameNotFoundException; " ខ្លួនឯងចឹងយើងពិបាកមិនដឹងត្រូវធ្វើយ៉ាងម្តេច 
+ដំណោះស្រាយ យើងត្រូវរកទៀត Implement inside there that have their oun implementation?
+
+
+2. right click on "UserDetailsService" then we can see the other implement interfaec : 
+
+public class InMemoryUserDetailsManager implements UserDetailsManager, UserDetailsPasswordService {}
+
+អោយតា បានឃើញ Class ចឹងដឹងថាវាអស់ត្រឹមនឹងហើយ។​   
+
+UserDetailsService have : 
+
+- SubInterface : UserDetailManager -> sub class: InMemory and Jdbc...
+- etc 
+
+so we think and chose : InMemory 
+
+- ចឹងយើងបង្កើត Object មួយចេញចេញពី Interface UserDetailsService ដោយ Implent from Implmentation ដែលនៅក្នុង
+Interface នឹង 
+
+UserDetailsService userDetailsService = new InMemoryUserDetailsManager(null);
+
+- យើងពិនិត្យមើលទៅ វាត្រូវការ UserDatils ទៀតដើម្បីបង្កើត Objet នឹងបាន ចឹងយើង បង្កើត UserDatils នឹងមក
+
+- ដោយសារតែវា ជា Interface ចឹងយើងត្រូវ Implementat Method inside UserDetails នឹង
+យើងត្រូវគិតថា ដោយសារតែយើងមិនទាន់បានធ្វើការទាញយក User នឹងពី database នោះទេ ចឹងវាគួរតែមាន UserDatail សម្រាប់
+សម្រាប់ធ្វើការ implentation អោយយើង​?​
+
+==> ប្រើក្បួនចាស់ដដែលយើងត្រូវ ស្វែងរក Implementation របស់វា​​ right clic then we can see : 
+
+public class User implements UserDetails, CredentialsContainer {} that we can use it because it is Class.
+
+we use : User user = new User(null, null, null); because " import org.springframework.security.core.userdetails.UserDetails;" inside the package 
+
+
+===> then we can check in the class User we can see the " UserBuilder" what we can add only customer property
+
+ដែលគេហៅវាថា Static interclass (inside class they create another class) 
+
+
+--------------------------------------------------------- SpringSecurity 
+
+ដាក់ Usre correct ors hery but it can not login because it need to be store increip password: 
+
+- Framwork : work together មានន័យថា វាមានស្រាប់ៗ មកហើយ 
+
+
+---------------------- Error Fix 
+
+1. creaste new class and overwrite method encoder 
+2. can not login need to put bean in the 
+
+@Bean
+	@Override
+	protected UserDetailsService userDetailsService() {
+
+----- beacuer UserDetailsService (no return then we can use bean to allow spring boot find return ory yerng) 
+
+- Condition one : Encoded password does not look like BCrypt
+
+យើងអត់បាន Encode លើង Password set នឹង
+
+- condition two : forget put @Bean at PasswordConfig :
+Field passwordEncoder in com.piseth.java.school.phoneshopenight.config.security.SecurityConfig required a bean of type 'org.springframework.security.crypto.password.PasswordEncoder' that could not be found.
+
+==> វារក bean អត់ឃើញ
+
+- condition three:  forget to put : //	@Autowired
+//	private PasswordEncoder passwordEncoder;
+
+==>
+
+
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.security.core.userdetails.UserDetailsService]: Factory method 'userDetailsService' threw exception; nested exception is java.lang.Error: Unresolved compilation problems: 
+	passwordEncoder cannot be resolved
+	passwordEncoder cannot be resolved
+
+
+==> Failed to instantiate = វាអត់អាចបង្កើត passwordEncoder​ នឹងយកមកប្រើបាន
+
+- condition 4: forget put "passwordEncoder.encode" 
+
+It will show in the console WARMING " 
+WARM 20299 ….. : Encoded password does not look like BCrypt វាប្រាប់យើងថា ក្រែងយើងប្រើ BCrypt.. អីម្តេនអត់ឃើញអ្នកឯងដាក់នៅកន្លែង passwordEncoder.encode("dara123")​ ចឹង?​
+
+
+note: when we use Bean at the 
+@Bean
+	@Override
+	protected UserDetailsService userDetailsService() {
+
+ពេល Run it will not crate default password for us anymore : becaue we use our customer UserDeatilService!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
