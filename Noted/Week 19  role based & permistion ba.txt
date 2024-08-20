@@ -2,5 +2,103 @@ Week 19 : role based & permistion based
 
 
 - role based (SALE, admin, user...) 
-- permistion based (bands/ write, red, deleted)  
+- permistion based:  (bands/ write, red, deleted)  
+
+-------------
+
+Role Base : ADMIN, SALE, HR
+
+Permission Base:
+
+ROLE_SALE
+brand:read
+model:read
+
+ROLE_ADMIN
+brand:write
+brand:read
+model:write
+model:read
+
+ROLE_HR
+
+=====================================================================
+
+1. Create Enum (In Enum we can not create public) everything need to be in private 
+
+@Getter
+@AllArgsConstructor
+public enum PermissionEnum {
+	
+	//band and model 
+	
+	BRAND_WRITE("brand:write"),
+	BRAND_READ("brand:read"),
+	MODEL_WRITE("model:write"),
+	MODEL_READ("model:read");
+	
+	private String description;
+	
+}
+
+How to import auto import static 
+
+
+--------------------
+
+we replase (.role ) to .authorities(Collection< ? entends GrantedAuthority> authorities): UserBuilder
+
+មានន័យថា .authorities វាត្រូវការ Collection ដែល Collection វាជា Generic( they create it as the Generic) then ? mean it can create from anything byunder GrantedAuthority. after that it return type: authorities.
+
+- Collection អាចមានជា List or Set ចឹងយើងត្រូវបង្កើតវា
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
