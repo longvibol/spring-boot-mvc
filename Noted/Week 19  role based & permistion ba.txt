@@ -1,7 +1,7 @@
 Week 19 : role based & permistion based 
 
 
-- role based (SALE, admin, user...) 
+- role based (SALE, admin, user...) Role មួយមាន Permission ច្រើននៅក្នុងនឹង 
 - permistion based:  (bands/ write, red, deleted)  
 
 -------------
@@ -51,6 +51,210 @@ we replase (.role ) to .authorities(Collection< ? entends GrantedAuthority> auth
 មានន័យថា .authorities វាត្រូវការ Collection ដែល Collection វាជា Generic( they create it as the Generic) then ? mean it can create from anything byunder GrantedAuthority. after that it return type: authorities.
 
 - Collection អាចមានជា List or Set ចឹងយើងត្រូវបង្កើតវា
+
+
+=================== Enum 
+
+- Gold : we use Eunm to create permission beacuse it no not duplicate( normaly we use it with Set data strature)
+
+
+** Add import static method 
+
+Automatic Static Imports | Let's Develop With
+
+
+>> Eclip --> reference --> search for "static" --> favorit --> add our class to favorit 
+
+-------------------------
+we need to implent from Garadthority 
+
+so we need to convert from Role to Grandthority 
+
+ADMIN(Set.of(BRAND_READ,BRAND_WRITE,MODEL_READ,MODEL_WRITE))
+
+
+------------------------ Testing when POST method need to check CSRF 
+
+when submit form need to use CSRF token (can hacker attacking) 
+
+- when request resour server will generate token to client 
+- then it will check this first token was provide to the first request not other client request
+(can be in the middle that can user our tokent but it is difference servie so they still cannot us it) 
+
+Ex. Real exapl Localhost but other is deffernce server differnce origine 
+==> spring security will block when differnce origine 
+
+but when request from one server to other server (from accrose people : we can disable CSRF token) 
+
+============== Set Role To Controller 
+
+Example : we want to set on Model (only Sale can check for the Model messagse Post)
+
+.antMatchers("/models").hasAuthority(RoleEnum.SALE.name())
+
+មានន័យថា សម្រាប់ models នឹងអោយតាមាន Role ជា sale ជាធ្វើបានទាំងអស់ដូចជា POST, PUT, DETLET..... 
+----------------- example on dara
+
+UserDetails user1 = User.builder()
+				.username("dara")
+				.password(passwordEncoder.encode("dara123"))
+				//.roles("SALE") // inside roles they write : Assert.isTrue(!role.startsWith("ROLE_"),
+				.authorities(RoleEnum.SALE.getAuthorities())
+				.build(); 
+
+
+
+out put we can see : in the RoleEnum :
+
+public Set<SimpleGrantedAuthority> getAuthorities(){		
+		// this = object it can be ADMIN or SALE
+		Set<SimpleGrantedAuthority> grantedAuthorities = this.permissions.stream()
+			.map(permission -> new SimpleGrantedAuthority(permission.getDescription()))
+			.collect(Collectors.toSet());
+		
+		
+		System.out.println(grantedAuthorities);
+		
+		return grantedAuthorities;
+	}
+
+====> 
+
+[model:write, brand:read]
+[brand:write, brand:read, model:write, model:read]
+
+
+we can not see road Sale.
+
+
+public Set<SimpleGrantedAuthority> getAuthorities(){		
+		// this = object it can be ADMIN or SALE
+		Set<SimpleGrantedAuthority> grantedAuthorities = this.permissions.stream()
+			.map(permission -> new SimpleGrantedAuthority(permission.getDescription()))
+			.collect(Collectors.toSet());
+		
+		// we add all the role from Enum to role 
+		SimpleGrantedAuthority role = new SimpleGrantedAuthority("ROLE_"+this.name());
+		grantedAuthorities.add(role);
+		
+		System.out.println(grantedAuthorities);
+		
+		return grantedAuthorities;
+	}
+
+-----------------------------------------
+
+Put the permission on the Method Level : controller 
+
+Search : @PreAuthorize("hasAuthority('brand:write')")
+
+https://www.baeldung.com/spring-security-method-security
+
+
+Style SpringSecurity 
+
+1. put the @PreAuthorize("hasAuthority('brand:write')") 
+
+// POST Method 
+	@PreAuthorize("hasAuthority('brand:write')")
+	@PostMapping
+	public ResponseEntity<?> create(@RequestBody BrandDTO brandDTO) {
+		Brand brand = BrandMapper.INSTANCE.toBrand(brandDTO);
+		brand = brandService.create(brand);
+		
+		return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(brand));
+	}
+
+2. In main security config
+
+@EnableGlobalMethodSecurity(
+  prePostEnabled = true, 
+  securedEnabled = true, 
+  jsr250Enabled = true)
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+------
+}
+
+
+------------------------------------
+
+2. Style Java
+ - Add "@RolesAllowed"  above the method 
+
+@RolesAllowed("ROLE_ADMIN")
+	@PostMapping
+	public ResponseEntity<?> create(@RequestBody ModelDTO modelDTO) {		
+		Model model = modelMapper.toModel(modelDTO);
+		model = modelService.save(model);
+		return ResponseEntity.ok(modelMapper.toModelDTO(model));
+	}
+
+or we can add "@RolesAllowed"
+
+in the class : to check it right click on the RoleAllowd then check the type:
+@Target({TYPE, METHOD})
+
+- TYPE = Class, interface,,,,
+
+ex : 
+
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/models")
+@RolesAllowed("ROLE_ADMIN")
+public class ModelController {
+	
+	private final ModelService modelService;
+	private final ModelEntityMapper modelMapper;
+	private final ColorService colorService;
+	
+	
+	
+	@PostMapping
+	public ResponseEntity<?> create(@RequestBody ModelDTO modelDTO) {		
+		Model model = modelMapper.toModel(modelDTO);
+		model = modelService.save(model);
+		return ResponseEntity.ok(modelMapper.toModelDTO(model));
+	}
+	
+	@PostMapping("color")
+	public ResponseEntity<?> createColor(@RequestBody Color color) {	
+		
+		colorService.create(color);
+		return ResponseEntity.ok(color);
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

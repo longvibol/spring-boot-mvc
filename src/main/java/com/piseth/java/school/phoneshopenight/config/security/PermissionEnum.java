@@ -15,12 +15,17 @@ public enum PermissionEnum {
 	MODEL_WRITE("model:write"),
 	MODEL_READ("model:read");
 	
+	
 	private String description;
 	
+	
 	/*
+	// create constractor 
 	private PermissionEnum(String desc) {
 		this.description = desc;
 	}
+	
 	*/
+	
 
 }

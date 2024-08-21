@@ -1,15 +1,11 @@
 package com.piseth.java.school.phoneshopenight.config.security;
 
-import static com.piseth.java.school.phoneshopenight.config.security.PermissionEnum.BRAND_READ;
-import static com.piseth.java.school.phoneshopenight.config.security.PermissionEnum.BRAND_WRITE;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +14,10 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
 @SuppressWarnings("deprecation")
+@EnableGlobalMethodSecurity(
+  prePostEnabled = true, 
+  securedEnabled = true, 
+  jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -25,14 +25,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests()
+		http
+				.csrf().disable()
+				.authorizeHttpRequests()
 				.antMatchers("/", "index.html", "css/**", "js/**").permitAll()
 				//.antMatchers("/brands").hasRole("SALE")
 //				.antMatchers(HttpMethod.POST, "/brands").hasAuthority("brand:write")
 //				.antMatchers(HttpMethod.GET, "/brands").hasAuthority("brand:read")
-				
-				.antMatchers(HttpMethod.POST, "/brands").hasAuthority(BRAND_WRITE.getDescription())
-				.antMatchers(HttpMethod.GET, "/brands").hasAuthority(BRAND_READ.getDescription())
+//				.antMatchers(HttpMethod.POST, "/brands").hasAuthority(PermissionEnum.BRAND_WRITE.name())
+				//.antMatchers(HttpMethod.POST, "/brands").hasAuthority(BRAND_WRITE.getDescription())
+				//.antMatchers(HttpMethod.GET, "/brands").hasAuthority(BRAND_READ.getDescription())
+				//.antMatchers("/models").hasRole(RoleEnum.SALE.name())
 				.anyRequest()				
 				.authenticated()
 				.and()
@@ -51,16 +54,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.username("dara")
 				.password(passwordEncoder.encode("dara123"))
 				//.roles("SALE") // inside roles they write : Assert.isTrue(!role.startsWith("ROLE_"),
-//				.authorities(GrantedAuthority)
+				.authorities(RoleEnum.SALE.getAuthorities())
 				.build();
 		
-		GrantedAuthority
+		//GrantedAuthority
 
 		// style interface
 		UserDetails user2 = User.builder()
 				.username("thida")
 				.password(passwordEncoder.encode("thida123"))
-				.roles("ADMIN")
+				//.roles("ADMIN")
+				.authorities(RoleEnum.ADMIN.getAuthorities())
 				.build();
 
 		UserDetailsService userDetailsService = new InMemoryUserDetailsManager(user1, user2);

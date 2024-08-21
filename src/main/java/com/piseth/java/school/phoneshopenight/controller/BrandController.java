@@ -5,8 +5,10 @@ import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +38,8 @@ public class BrandController {
 	private final ModelEntityMapper modelMapper;
 	
 	// POST Method 
-	@RequestMapping(method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('brand:write')")
+	@PostMapping
 	public ResponseEntity<?> create(@RequestBody BrandDTO brandDTO) {
 		Brand brand = BrandMapper.INSTANCE.toBrand(brandDTO);
 		brand = brandService.create(brand);
@@ -61,6 +64,7 @@ public class BrandController {
 	
 	
 	//GET Method GET Brands
+	@PreAuthorize("hasAuthority('brand:read')")
 	@GetMapping
 	public ResponseEntity<?> getBrands(@RequestParam Map<String, String> params){
 		Page<Brand> page = brandService.getBrands(params);
