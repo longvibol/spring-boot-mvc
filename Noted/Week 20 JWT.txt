@@ -1,1 +1,87 @@
 Week 20 JWT 
+
+- JWT : JSON WEB Token have three part:
+
+https://jwt.io/
+
+1. HEADER
+2. PAYLOAD
+3. SIGNATURE
+
+EX:
+
+
+eirher.heorj.l;jjkler
+
+វាបែងចែកអោយ . 
+
+---​ លក្ខណៈ 
+
+1. Stateless : វាអត់  Store នៅ database ទេ Oppiste of StateFull(it have data in transaction) 
+2. Multiple system : យើងធ្វើតែម្តងអាចអោយ System ផ្សេងប្រើបានដែល 
+
+ចឹងយើងអាចអោយ system can talk together : then we can convert it 
+
+----------------- Flow 
+Step one to user login to the system then server generate Tokent 
+
+1. login: 
+
+- username
+- password
+
+or later on we want to generate by 
+
+- email 
+- password  
+
+
+
+0k verify ==> generate token (jwt) then when the client request to Api. it will keep it in the header 
+
+===> ok => generate token (jwt) throw header response 
+
+2. Access to resource with jwt
+
+3. check step 
+- valide token or not 
+- expire
+==> can success 
+
+============================ Generate Token 
+
+
+How to generate JWT in JAVA :
+
+Search :jwt java github : 
+
+https://github.com/jwtk/jjwt?tab=readme-ov-file#jdk-projects
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
