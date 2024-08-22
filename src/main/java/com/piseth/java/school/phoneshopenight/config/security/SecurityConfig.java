@@ -3,15 +3,15 @@ package com.piseth.java.school.phoneshopenight.config.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import com.piseth.java.school.phoneshopenight.config.jwt.JwtLoginFilter;
 import com.piseth.java.school.phoneshopenight.config.jwt.TokenVerifyFilter;
@@ -26,6 +26,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private UserDetailsService userDetailsService;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -37,16 +39,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				.authorizeHttpRequests()
 				.antMatchers("/", "index.html", "css/**", "js/**").permitAll()
-				//.antMatchers("/brands").hasRole("SALE")
-//				.antMatchers(HttpMethod.POST, "/brands").hasAuthority("brand:write")
-//				.antMatchers(HttpMethod.GET, "/brands").hasAuthority("brand:read")
-//				.antMatchers(HttpMethod.POST, "/brands").hasAuthority(PermissionEnum.BRAND_WRITE.name())
-				//.antMatchers(HttpMethod.POST, "/brands").hasAuthority(BRAND_WRITE.getDescription())
-				//.antMatchers(HttpMethod.GET, "/brands").hasAuthority(BRAND_READ.getDescription())
-				//.antMatchers("/models").hasRole(RoleEnum.SALE.name())
 				.anyRequest()				
 				.authenticated();
 	}
+	
+	
+	// we override inorder to when login it go to check out users
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		
+		auth.authenticationProvider(getAuthenticationProvider());
+		
+	}
+	
+	
+	@Bean
+	public AuthenticationProvider getAuthenticationProvider() {
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		
+		authenticationProvider.setUserDetailsService(userDetailsService);	
+		authenticationProvider.setPasswordEncoder(passwordEncoder);
+		return authenticationProvider;
+		
+//		public class UserDetailsServiceImpl implements UserDetailsService ==> so we can put our class : "UserDetailsServiceImpl"
+	}
+	
+	
+	
+	/*
 
 	@Bean
 	@Override
@@ -77,5 +97,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return userDetailsService;
 
 	}
+	
+	*/
 
 }
