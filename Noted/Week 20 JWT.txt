@@ -57,6 +57,145 @@ Search :jwt java github :
 
 https://github.com/jwtk/jjwt?tab=readme-ov-file#jdk-projects
 
+============================= 
+
+
+ពេលបាន Request from input យើងចង់ Serier lift វាទៅកាន់ Object វិញ
+
+
+**** JSON -> Object : JSON ពេលយើង Convert to Object in Java it called Deserierlifsation 
+**** Object -> JSON it called Serierlife 
+
+
+{
+    "username" : "dara",
+    "password" : "dara123"
+}
+
+then verity in the class login 
+
+Example:
+
+try {
+			LoginRequest loginRequest = mapper.readValue(request.getInputStream(), LoginRequest.class);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+We can get loginRequest object in Java.
+
+------------------ we check inside the interface 
+
+public interface Authentication extends Principal, Serializable {
+
+Collection<? extends GrantedAuthority> getAuthorities();
+
+Object getCredentials(); }
+
+ចឹងយើងត្រូវទៅយក Implementation របស់វាយកមកប្រើ
+
+Note:
+
+authenticate(Authenticate authentication) : Authentication - AuthenticationManager
+
+- authenticated : Is Method 
+- (Authenticate authentication) : Authenticate ជាឈ្មោះ Class or Interface and authentication ឈ្មោះ Variable 
+
+- ": Authentication ​ បន្ទាប់" : ហើយគេដាក់ថា Authentication នឹងគឺអ្វីដែលវាត្រូវ Return វិញ
+- "- AuthenticationManager" - ហើយនឹងវាប្រាប់ថា class ដើមដែលវា Impl មកនឹងគឺ AuthenticationManager
+
+
+***** When it is in Interface we want to crate obejct *** We need to implent on of the implementation inside the main Interface 
+
+-- AuthenticationManager នឹង បង្កើតមកដើម្បីអោយ យក Object ដែលបាន deserilift នឹងមកធ្វើការ ផ្ទាង់ផ្ទាត់ជាមួយ Database របស់យើង 
+
+*** the location checking from AuthenticationManager inside " public class SecurityConfig extends WebSecurityConfigurerAdapter" 
+
+UserDetails user1 = User.builder()
+				.username("dara")
+				.password(passwordEncoder.encode("dara123"))
+				//.roles("SALE") // inside roles they write : Assert.isTrue(!role.startsWith("ROLE_"),
+				.authorities(RoleEnum.SALE.getAuthorities())
+				.build();
+
+
+------------------------------------
+
+យើងត្រូវធ្វើការ Implement sccessFullAuthenticate ដើម្បីពេលវា verify hery វាជានាក់ត្រូវធ្វើការបន្ត
+
+==> we crate JWT token 
+
+1. Add dependency 
+
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-api</artifactId>
+    <version>0.12.6</version>
+</dependency>
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-impl</artifactId>
+    <version>0.12.6</version>
+    <scope>runtime</scope>
+</dependency>
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-jackson</artifactId> <!-- or jjwt-gson if Gson is preferred -->
+    <version>0.12.6</version>
+    <scope>runtime</scope>
+</dependency>
+
+* local repository M2. where Maven store the dependency 
+
+
+Step 2 : Access to any api (request to resource with the Header Token : we have generate for the client )
+
+- check header if contain authorization or not 
+- check jwt 
+- Access one time will need the token in the header for each API (For our system security )   
+- We use one per request filter 
+
+
+=========================== Note
+
+Object object = body.get(secretKey);
+
+see from Token it will return List of Map that have Key and Value:
+
+"authorities": [
+    {
+      "authority": "ROLE_SALE"
+    },
+    {
+      "authority": "brand:read"
+    },
+    {
+      "authority": "model:read"
+    }
+  ],
+
+----------------
+
+{
+      "authority": "ROLE_SALE"
+    },
+
+Above this it is and Object we get one by one 
+
+
+
+-------------------
+
+.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+to tell the secssion not store 
+
+
+
+
+
 
 
 
