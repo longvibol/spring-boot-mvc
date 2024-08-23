@@ -13,7 +13,7 @@ add spring security
 
 2. build package >> Password login 
 -uer
-- password will generator from running line : Using generated security password: e4aa1a3a-eb62-4830-854b-bd1d36b6f356
+- password will generator from running line : Using generated security password: e4aa1a3a-eb62-4830-854b-bd1d36b6f356 (generate from Spring Security) 
 
 ==> then we can login buy Brower 
 
@@ -29,6 +29,9 @@ Keyword to search:
 + How to replace spring security :webSercurityConfiguerAdapter
 
 ** 
+our create class : SecurityConfig 
+- WebSecurityConfigurerAdapter from Spring 
+
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	យើង Ctrl + Space មកវានឹងបង្ហាថាមាន Overide method អ្វីខ្លះដែលអាចអោយយើងប្រើបានហើយ

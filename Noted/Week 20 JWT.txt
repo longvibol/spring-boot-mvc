@@ -23,7 +23,7 @@ eirher.heorj.l;jjkler
 ចឹងយើងអាចអោយ system can talk together : then we can convert it 
 
 ----------------- Flow 
-Step one to user login to the system then server generate Tokent 
+Step one to user login to the system then server generate Token 
 
 1. login: 
 
@@ -37,7 +37,7 @@ or later on we want to generate by
 
 
 
-0k verify ==> generate token (jwt) then when the client request to Api. it will keep it in the header 
+ok verify ==> generate token (jwt) then when the client request to Api. it will keep it in the header 
 
 ===> ok => generate token (jwt) throw header response 
 
@@ -125,7 +125,7 @@ UserDetails user1 = User.builder()
 
 យើងត្រូវធ្វើការ Implement sccessFullAuthenticate ដើម្បីពេលវា verify hery វាជានាក់ត្រូវធ្វើការបន្ត
 
-==> we crate JWT token 
+==> we crate JWT token by add below dp 
 
 1. Add dependency 
 
@@ -194,11 +194,19 @@ to tell the secssion not store
 
 
 
+===========================
 
 
+extends keyword is used to inherit a class or interface, while implements keyword is used to implement the interfaces
+
+- extend យើងអាច extend បានច្រើន Class
+- implements can only one interface 
 
 
+====================
 
+* Class JwtLoginFilter : សម្រាប់ check Username and Password have inside our db or not 
+* TokenVerifyFilter : សម្រាប់ធ្វើការ ពិនិត្យ Token correct or not when transfter request to other API 
 
 
 

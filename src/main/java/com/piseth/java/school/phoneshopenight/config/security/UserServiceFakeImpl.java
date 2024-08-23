@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceFakeImpl implements UserService {
 
 	private final PasswordEncoder passwordEncoder;
 

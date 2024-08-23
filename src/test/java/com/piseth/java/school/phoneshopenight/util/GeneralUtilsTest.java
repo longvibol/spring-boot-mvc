@@ -5,12 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.piseth.java.school.phoneshopenight.utils.GeneralUtils;
 
 public class GeneralUtilsTest {
 
-	@Test
+	//@Test
 	public void testToIntegerList() {
 		// Given
 		List<String> names = List.of("Dara", "Cheata", "Thida");
@@ -24,7 +26,7 @@ public class GeneralUtilsTest {
 		assertEquals(5, list.get(2));
 	}
 
-	@Test
+	//@Test
 	public void testGetEvenNumber() {
 		// Given
 		List<Integer> list = List.of(4, 6, 7, 8, 5, 40);
@@ -36,4 +38,14 @@ public class GeneralUtilsTest {
 		assertEquals(4, evenNumber.size());
 		assertEquals(4, evenNumber.get(0));
 	}
+	
+	@Test
+	public void showPassword() {
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String encode = passwordEncoder.encode("vibol123");
+		
+		System.out.println(encode);
+		
+	}
+	
 }

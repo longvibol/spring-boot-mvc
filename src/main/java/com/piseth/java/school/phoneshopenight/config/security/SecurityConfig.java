@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.csrf().disable()
 				.addFilter(new JwtLoginFilter(authenticationManager()))
 				.addFilterAfter(new TokenVerifyFilter(), JwtLoginFilter.class)
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // no data store in token 
 				.and()
 				.authorizeHttpRequests()
 				.antMatchers("/", "index.html", "css/**", "js/**").permitAll()
@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	
-	// we override inorder to when login it go to check out users
+	// we override in order to when login it go to check out users : it checkfor user first 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
@@ -59,11 +59,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		authenticationProvider.setUserDetailsService(userDetailsService);	
 		authenticationProvider.setPasswordEncoder(passwordEncoder);
+		
 		return authenticationProvider;
 		
 //		public class UserDetailsServiceImpl implements UserDetailsService ==> so we can put our class : "UserDetailsServiceImpl"
 	}
-	
 	
 	
 	/*

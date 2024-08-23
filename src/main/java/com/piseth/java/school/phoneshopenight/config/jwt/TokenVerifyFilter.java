@@ -39,7 +39,7 @@ public class TokenVerifyFilter extends OncePerRequestFilter{
 			
 			filterChain.doFilter(request, response);
 			return;
-			
+			// finished can not login if does not have "Authorization" in the header
 		}
 		// else = have Auhorization we get only token and remove "Bearer "
 		String token = authorizationHeader.replace("Bearer ", "");
@@ -54,7 +54,7 @@ public class TokenVerifyFilter extends OncePerRequestFilter{
 		
 		String subject = body.getSubject();
 		
-		// we want object inside Authorization ==> we put the Key then it will return object 
+		// we want object inside authorities ==> we put the Key then it will return object [ROLE_ADMIN : brand:read...]
 		
 		List<Map<String, String>> authorities = (List<Map<String, String>>) body.get("authorities");
 		
@@ -62,7 +62,7 @@ public class TokenVerifyFilter extends OncePerRequestFilter{
 	
 		Set<SimpleGrantedAuthority> grantedAuthorities = authorities.stream()
 				.map(x -> new SimpleGrantedAuthority(x.get("authority")))
-				.collect(Collectors.toSet());
+				.collect(Collectors.toSet());	
 		
 		//==>  "authority":  ==> "ROLE_SALE"
 		

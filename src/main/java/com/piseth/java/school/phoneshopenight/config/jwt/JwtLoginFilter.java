@@ -23,15 +23,16 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
-
 	// use for authenticate : provide username and password
+	
+	
 	private final AuthenticationManager authenticationManager;
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException {
 
-		// use object mapper to convert
+		// use object mapper to convert from input Serilifesation to java object 
 
 		ObjectMapper mapper = new ObjectMapper();
 
