@@ -1,0 +1,11 @@
+Week 22 Audi Entity : Spring Security 
+
+Role and permission 
+user audit 
+PUT method 
+order matter 
+
+========================== Role and Permission 
+
+- One person can have many Role and permission 
+In real 

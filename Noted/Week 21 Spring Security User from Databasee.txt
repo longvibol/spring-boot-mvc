@@ -26,6 +26,17 @@ private String username;
 
 -------------------------
 
+Note:
+
+1 class AuthUser implements UserDetails : ដើម្បីបង្កើត Authuser ហើយយើងយកតាម Implementat from UserDetails
+2 បង្កើត our own fake service to get the user from our assign :
+public interface UserService{
+  Optional<AuthUser> findUserByUsername(String username);
+
+}
+
+3.public class UserServiceImpl implements UserService : ដើម្បី Add user ចូល ដោយយើងដាក់វាជា Set List<AuthUser> users = List.of(…..)
+
 
 
 

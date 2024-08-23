@@ -207,7 +207,7 @@ extends keyword is used to inherit a class or interface, while implements keywor
 
 * Class JwtLoginFilter : សម្រាប់ check Username and Password have inside our db or not 
 * TokenVerifyFilter : សម្រាប់ធ្វើការ ពិនិត្យ Token correct or not when transfter request to other API 
-
+* public AuthenticationProvider getAuthenticationProvider() សម្រាប់
 
 
 
