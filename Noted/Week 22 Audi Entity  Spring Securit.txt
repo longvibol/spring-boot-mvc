@@ -82,6 +82,73 @@ INSERT INTO public.users_roles(
 	user_id, roles_id)
 	VALUES (1,2),(2,1);
 
+============================
+
+- In JPA when we create one Entiy that have feild call other entiy it is Lazy ទាល់តែយើង Access ទៅកាន់វាបានវាទៅទាញ data មក
+We want when the User loading we want all the sub :
+
+@ManyToMany(fetch = FetchType.EAGER)
+	private Set<Role> roles;
+
+--------------------------------------
+
+*** How to use user name, password, Role and permission from Database ****
+1. We need Autherity 
+
+ពេលយើង Load user ម្នាក់មកវានឹងទៅទាញយក Role ហើយ Role នីមួយៗវាមាន Permission នៅក្នុងនឹង
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
