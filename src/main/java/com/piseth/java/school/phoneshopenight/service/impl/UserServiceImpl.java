@@ -48,14 +48,16 @@ public class UserServiceImpl implements UserService{
 	
 	private Set<SimpleGrantedAuthority> getAuthorities(Set<Role> roles){
 		
-		Set<SimpleGrantedAuthority> autherity1 = roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_"+role)).collect(Collectors.toSet());
+		Set<SimpleGrantedAuthority> autherity1 = roles.stream()
+				.map(role -> new SimpleGrantedAuthority("ROLE_"+role.getName()))
+				.collect(Collectors.toSet());
 		
 		// from role we want to map it to SimplegrantedAuthority 
 		
-		Set<SimpleGrantedAuthority> autheritys = roles.stream().flatMap(role ->{
-			
+		Set<SimpleGrantedAuthority> autheritys = roles.stream()
+				.flatMap(role ->{			
 			return toStreamPermission(role);
-		}).collect(Collectors.toSet());
+					}).collect(Collectors.toSet());
 	
 	autheritys.addAll(autherity1);
 	
@@ -66,7 +68,8 @@ public class UserServiceImpl implements UserService{
 	// we create separate function to convert from Role -> permission to SimpleGrantedAuthority (Need to create ROLE_ and role from user
 	private Stream<SimpleGrantedAuthority> toStreamPermission(Role role){		
 		// inside role it have set<permission> so we map one more step to get the permission from role 		
-		return role.getPermissions().stream().map(permission -> new SimpleGrantedAuthority(permission.getName()));
+		return role.getPermissions().stream()
+				.map(permission -> new SimpleGrantedAuthority(permission.getName()));
 	}
 
 }
