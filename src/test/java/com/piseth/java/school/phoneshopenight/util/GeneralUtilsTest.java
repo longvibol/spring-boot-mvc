@@ -42,7 +42,7 @@ public class GeneralUtilsTest {
 	@Test
 	public void showPassword() {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		String encode = passwordEncoder.encode("vibol123");
+		String encode = passwordEncoder.encode("dara123");
 		
 		System.out.println(encode);
 		
