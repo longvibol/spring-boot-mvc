@@ -54,14 +54,16 @@ public class UserServiceImpl implements UserService{
 		
 		// from role we want to map it to SimplegrantedAuthority 
 		
-		Set<SimpleGrantedAuthority> autheritys = roles.stream()
-				.flatMap(role ->{			
-			return toStreamPermission(role);
-					}).collect(Collectors.toSet());
+		Set<SimpleGrantedAuthority> authorities = roles.stream()
+				.flatMap(role ->toStreamPermission(role))
+				.collect(Collectors.toSet());
+		
 	
-	autheritys.addAll(autherity1);
+		
+		authorities.addAll(autherity1);
+
 	
-	return autheritys;
+	return authorities;
 		
 	}	
 

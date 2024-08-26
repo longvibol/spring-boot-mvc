@@ -68,7 +68,7 @@ INSERT INTO public.roles_permissions(
 
 INSERT INTO public.users(
 	account_non_expired, account_non_locked, credentials_non_expired, enabled, first_name, last_name, password, username)
-	VALUES (ture, ture, ture, ture, 'dara', 'van','$2a$10$vRTrfapeIh0zaQuYUooYveI5ohvPf30/EpA9zxC4x1AWJ5gwxAm1y', 'dara');
+	VALUES (true, true, true, true, 'dara', 'van','$2a$10$vRTrfapeIh0zaQuYUooYveI5ohvPf30/EpA9zxC4x1AWJ5gwxAm1y', 'dara');
 
 ---------------
 
