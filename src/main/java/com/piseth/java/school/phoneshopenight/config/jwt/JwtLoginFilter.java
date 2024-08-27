@@ -62,6 +62,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 		
 		String token = Jwts.builder()
 				.setSubject(authResult.getName())
+				.setIssuedAt(new Date())
 				.claim("authorities", authResult.getAuthorities())
 				.setIssuedAt(new Date())
 				.setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(7)))

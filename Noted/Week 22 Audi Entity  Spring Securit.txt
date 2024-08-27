@@ -102,6 +102,44 @@ We want when the User loading we want all the sub :
 
 
 
+---------Insert role and user to Color API 
+
+INSERT INTO public.roles(
+	id, name)
+	VALUES (3,'Accountant');
+
+= create roles id =3 and Accountant Role
+
+----------- insert permission
+
+INSERT INTO public.permission(
+	id, name)
+	VALUES (5,'color:write')
+
+= create persmition : color:wire
+
+------------- insert User_Roles
+
+INSERT INTO public.users_roles(
+	user_id, roles_id)
+	VALUES (2,3);
+
+= User id: 2= thida and roles_id:3 = Accountant 
+
+----------- Insert roles_permission 
+
+
+INSERT INTO public.roles_permissions(
+	role_id, permissions_id)
+	VALUES (3, 5)
+
+
+=====================================================
+
+
+
+
+
 
 
 

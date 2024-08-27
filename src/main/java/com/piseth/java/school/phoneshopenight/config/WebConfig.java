@@ -10,7 +10,7 @@ public class WebConfig implements WebMvcConfigurer{
 	
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-		.allowedOriginPatterns("http://localhost:4200", "http://localhost:4201");
+		.allowedOriginPatterns("http://localhost:4200", "http://localhost:4201","http://localhost:8080/swagger-ui/");
 	}
 
 }

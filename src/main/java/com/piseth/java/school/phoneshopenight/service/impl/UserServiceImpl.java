@@ -5,8 +5,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.security.RolesAllowed;
-
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,57 +23,43 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
-	
-	private final UserRepository repository;
+	private final UserRepository userRepository;
 
 	@Override
 	public Optional<AuthUser> findUserByUsername(String username) {
-	User user = repository.findByUsername(username)
-			.orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "User not found"));
-	
-	AuthUser authUser = AuthUser.builder()
-			.username(user.getUsername())
-			.password(user.getPassword())
-			.authorities(getAuthorities(user.getRoles()))
-			.accountNonExpired(user.isAccountNonExpired())
-			.accountNonLocked(user.isAccountNonLocked())
-			.credentialsNonExpired(user.isCredentialsNonExpired())
-			.enabled(user.isEnabled())
-			.build();
+		User user = userRepository.findByUsername(username)
+			.orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "User not found "));
 		
+		AuthUser authUser = AuthUser.builder()
+				.username(user.getUsername())
+				.password(user.getPassword())
+				.authorities(getAuthorities(user.getRoles()))
+				.accountNonExpired(user.isAccountNonExpired())
+				.accountNonLocked(user.isAccountNonLocked())
+				.credentialsNonExpired(user.isCredentialsNonExpired())
+				.enabled(user.isEnabled())
+				.build();
 		return Optional.ofNullable(authUser);
 	}
 	
 	private Set<SimpleGrantedAuthority> getAuthorities(Set<Role> roles){
-		
-		Set<SimpleGrantedAuthority> autherity1 = roles.stream()
-				.map(role -> new SimpleGrantedAuthority("ROLE_"+role.getName()))
-				.collect(Collectors.toSet());
-		
-		// from role we want to map it to SimplegrantedAuthority 
-		
-		Set<SimpleGrantedAuthority> authorities = roles.stream()
-				.flatMap(role ->toStreamPermission(role))
-				.collect(Collectors.toSet());
-		
+				Set<SimpleGrantedAuthority> authorities1 = roles.stream()
+					.map(role -> new SimpleGrantedAuthority("ROLE_"+ role.getName()))
+					.collect(Collectors.toSet());
+				
+				Set<SimpleGrantedAuthority> authorities = roles.stream()
+						.flatMap(role ->toStream(role))
+						.collect(Collectors.toSet());
+				authorities.addAll(authorities1);
+				return authorities;
+	}
 	
-		
-		authorities.addAll(autherity1);
-
-	
-	return authorities;
-		
-	}	
-
-	// we create separate function to convert from Role -> permission to SimpleGrantedAuthority (Need to create ROLE_ and role from user
-	private Stream<SimpleGrantedAuthority> toStreamPermission(Role role){		
-		// inside role it have set<permission> so we map one more step to get the permission from role 		
+	private Stream<SimpleGrantedAuthority> toStream(Role role){
 		return role.getPermissions().stream()
-				.map(permission -> new SimpleGrantedAuthority(permission.getName()));
+			.map(permission -> new SimpleGrantedAuthority(permission.getName()));
 	}
 
 }
-
 
 
 
