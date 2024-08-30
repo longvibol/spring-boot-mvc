@@ -1,0 +1,86 @@
+Week 23: Remove deprecated implementation 
+
+- Remove deprecated implementation 
+- PUT method 
+- JWT expired (how we can use exception handle) 
+- order matter 
+
+
+
+1. Remove deprecated implementation: 
+
+https://backendstory.com/spring-security-how-to-replace-websecurityconfigureradapter/
+
+សម្រាប់ Version ថ្មីគេប្រើ Component base so we no need to expend from WebSecurityConfigureAdapter ទេ
+
+
+---
+Old version (Before Spring Security 5.7.0)
+
+@Override
+protected void configure(AuthenticationManagerBuilder auth) {
+    auth.authenticationProvider(customAuthenticationProvider)
+        .authenticationProvider(googleCloudAuthenticationProvider);
+}
+New version (After Spring Security 5.7.0)
+
+@Autowired
+void registerProvider(AuthenticationManagerBuilder auth) {
+    auth.authenticationProvider(customAuthenticationProvider)
+        .authenticationProvider(googleCloudAuthenticationProvider);
+}
+
+void registerProvider(AuthenticationManagerBuilder auth) {} គេហៅថា Signature 
+
+
+**Error ** 
+unresolvable circular reference មានន័យថា A ហៅ B ហើយ B ហៅ C តៗ​គ្នាមកចឹង
+
+
+ Complient អនុឡោម តាមយើងអត់
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

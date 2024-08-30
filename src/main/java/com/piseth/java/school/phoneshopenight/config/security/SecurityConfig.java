@@ -3,15 +3,18 @@ package com.piseth.java.school.phoneshopenight.config.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 import com.piseth.java.school.phoneshopenight.config.jwt.JwtLoginFilter;
 import com.piseth.java.school.phoneshopenight.config.jwt.TokenVerifyFilter;
@@ -22,18 +25,21 @@ import com.piseth.java.school.phoneshopenight.config.jwt.TokenVerifyFilter;
   prePostEnabled = true, 
   securedEnabled = true, 
   jsr250Enabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	AuthenticationConfiguration authenticationConfiguration;
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
+	@Bean
+	public SecurityFilterChain configure(HttpSecurity http) throws Exception {
 		http
 				.csrf().disable()
-				.addFilter(new JwtLoginFilter(authenticationManager()))
+				.addFilter(new JwtLoginFilter(authenticationManager(authenticationConfiguration)))
 				.addFilterAfter(new TokenVerifyFilter(), JwtLoginFilter.class)
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // no data store in token 
 				.and()
@@ -41,17 +47,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/", "index.html", "css/**", "js/**").permitAll()
 				.anyRequest()				
 				.authenticated();
+		
+		return http.build();
 	}
-	
-	
-	// we override in order to when login it go to check out users : it checkfor user first 
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		
+	// we override in order to when login it go to check out users : it check for user first 	
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
 		auth.authenticationProvider(getAuthenticationProvider());
 		
 	}
 	
+	@Bean
+	AuthenticationManager authenticationManager(
+	        AuthenticationConfiguration authenticationConfiguration) throws Exception {
+	    return authenticationConfiguration.getAuthenticationManager();
+	}	
 	
 	@Bean
 	public AuthenticationProvider getAuthenticationProvider() {
@@ -65,39 +76,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //		public class UserDetailsServiceImpl implements UserDetailsService ==> so we can put our class : "UserDetailsServiceImpl"
 	}
 	
-	
-	/*
-
-	@Bean
-	@Override
-	protected UserDetailsService userDetailsService() {
-
-		// concept Inheritance OOP
-		// style implentation
-		//User user1 = new User("dara", passwordEncoder.encode("dara123"), Collections.emptyList());
-		
-		UserDetails user1 = User.builder()
-				.username("dara")
-				.password(passwordEncoder.encode("dara123"))
-				//.roles("SALE") // inside roles they write : Assert.isTrue(!role.startsWith("ROLE_"),
-				.authorities(RoleEnum.SALE.getAuthorities())
-				.build();
-		
-		//GrantedAuthority
-
-		// style interface
-		UserDetails user2 = User.builder()
-				.username("thida")
-				.password(passwordEncoder.encode("thida123"))
-				//.roles("ADMIN")
-				.authorities(RoleEnum.ADMIN.getAuthorities())
-				.build();
-
-		UserDetailsService userDetailsService = new InMemoryUserDetailsManager(user1, user2);
-		return userDetailsService;
-
-	}
-	
-	*/
 
 }
