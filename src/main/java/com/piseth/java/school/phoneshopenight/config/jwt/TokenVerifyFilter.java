@@ -22,7 +22,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class TokenVerifyFilter extends OncePerRequestFilter{
 
 	@Override
@@ -45,34 +47,40 @@ public class TokenVerifyFilter extends OncePerRequestFilter{
 		String token = authorizationHeader.replace("Bearer ", "");
 		String secretKey ="abcddfdsf1243abcddfdsf1243abcddfdsf1243";
 		
-		Jws<Claims> claimsJws = Jwts.parser()
-		.setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes())).build().parseClaimsJws(token);
-		
-		Claims body = claimsJws.getBody();
-	
-		// now we get the Authorization 
-		
-		String subject = body.getSubject();
-		
-		// we want object inside authorities ==> we put the Key then it will return object [ROLE_ADMIN : brand:read...]
-		
-		List<Map<String, String>> authorities = (List<Map<String, String>>) body.get("authorities");
-		
-		// 3: get Get Value from Map Object  
-	
-		Set<SimpleGrantedAuthority> grantedAuthorities = authorities.stream()
-				.map(x -> new SimpleGrantedAuthority(x.get("authority")))
-				.collect(Collectors.toSet());	
-		
-		//==>  "authority":  ==> "ROLE_SALE"
-		
-		// 2 : Need Authentication 
-		
-		Authentication authentication = new UsernamePasswordAuthenticationToken(subject, null, grantedAuthorities);
-		
-		// 1: to make it remember we use Security Holder
-		
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+		try {
+			
+			Jws<Claims> claimsJws = Jwts.parser()
+					.setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes())).build().parseClaimsJws(token);
+					
+					Claims body = claimsJws.getBody();
+				
+					// now we get the Authorization 
+					
+					String subject = body.getSubject();
+					
+					// we want object inside authorities ==> we put the Key then it will return object [ROLE_ADMIN : brand:read...]
+					
+					List<Map<String, String>> authorities = (List<Map<String, String>>) body.get("authorities");
+					
+					// 3: get Get Value from Map Object  
+				
+					Set<SimpleGrantedAuthority> grantedAuthorities = authorities.stream()
+							.map(x -> new SimpleGrantedAuthority(x.get("authority")))
+							.collect(Collectors.toSet());	
+					
+					//==>  "authority":  ==> "ROLE_SALE"
+					
+					// 2 : Need Authentication 
+					
+					Authentication authentication = new UsernamePasswordAuthenticationToken(subject, null, grantedAuthorities);
+					
+					// 1: to make it remember we use Security Holder
+					
+					SecurityContextHolder.getContext().setAuthentication(authentication);			
+			
+		} catch (Exception e) {
+			log.info(e.getMessage());
+		}		
 		
 		filterChain.doFilter(request, response); // doFilter in order tell the filete finish step 
 		

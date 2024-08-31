@@ -55,6 +55,7 @@ public class BrandController {
 	}
 	
 	//PUT Method 
+	@PreAuthorize("hasAuthority('brand:write')")
 	@PutMapping("{id}")
 	public ResponseEntity<?> update(@PathVariable("id") Long brandId, @RequestBody BrandDTO brandDTO){
 		Brand brand = BrandMapper.INSTANCE.toBrand(brandDTO);

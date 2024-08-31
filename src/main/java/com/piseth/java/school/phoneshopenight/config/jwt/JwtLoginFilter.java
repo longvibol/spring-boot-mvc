@@ -65,7 +65,8 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 				.setIssuedAt(new Date())
 				.claim("authorities", authResult.getAuthorities())
 				.setIssuedAt(new Date())
-				.setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(7)))
+				//.setExpiration(java.sql.Date.valueOf(LocalDate.now().plus(null) 	 	
+				.setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(1)))
 				.setIssuer("phoneshop.com")
 				.signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))				
 				.compact();
