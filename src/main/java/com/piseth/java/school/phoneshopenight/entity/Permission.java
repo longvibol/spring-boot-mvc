@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "permissions")
+@Table(name = "permission")
 @Data
 public class Permission {
 	@Id

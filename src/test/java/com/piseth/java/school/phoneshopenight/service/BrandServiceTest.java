@@ -2,7 +2,6 @@ package com.piseth.java.school.phoneshopenight.service;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -12,6 +11,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -25,6 +26,9 @@ public class BrandServiceTest {
 	
 	@Mock
 	private BrandRepository brandRepository;
+	
+	@Captor
+	private ArgumentCaptor<Brand> brandCaptor;
 	
 //	@Autowired
 	// this below is call Polimolishim and we can not use Autowired in Testing 
@@ -112,5 +116,39 @@ public class BrandServiceTest {
 			.hasMessage(String.format("%s With id = %d not found","Brand", 2 ));
 //			.hasMessageEndingWith("not found");
 	}
+	
+	@Test
+	public void testUpdate() {
+		
+		//Given
+		
+		Brand brandInDB = new Brand(1L, "Apple");
+		Brand brand = new Brand(1L, "Apple 2");
+		
+		// we want to knonw in the db: brand(1,"Apple")
+		
+		//when 
+		when(brandRepository.findById(1L)).thenReturn(Optional.ofNullable(brandInDB));
+		//when(brandRepository.save(any(Brand.class))).thenReturn(brand); // option one to fix null pointer in save method 
+		Brand brandAfterUpdate = brandService.update(1L, brand);		
+		
+		//then 
+		verify(brandRepository, times(1)).findById(1L);
+		//assertEquals("Apple 2", brandAfterUpdate.getName());		
+		
+		// this point it will error with null pointer cause the save method it don't know what to save 
+		// the recoment we use Argument capture 
+				
+		verify(brandRepository).save(brandCaptor.capture());
+		assertEquals("Vibol", brandCaptor.getValue().getName());
+		assertEquals(1L, brandCaptor.getValue().getId());
+		
+		
+	}
+	
+	
+	
+	
+	
 
 }

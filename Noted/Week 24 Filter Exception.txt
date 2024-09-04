@@ -1,0 +1,169 @@
+Week 24 Filter Exception
+
+
+Add Expection handler 
+
+1. Create Globle Handler expection 
+
+@ControllerAdvice
+public class GlobalExceptionHandler { 
+
+	@ExceptionHandler(ApiException.class)
+	public ResponseEntity<?> handleApiException(ApiException e){
+		ErrorResponse errorResponse = new ErrorResponse(e.getStatus(), e.getMessage());
+		return ResponseEntity
+				.status(e.getStatus())
+				.body(errorResponse);
+	}
+	
+}
+
+2. think where the user will login first : TokenVerifyFilter ( where the user login to this filter first ) 
+
+@Slf4j
+public class TokenVerifyFilter extends OncePerRequestFilter{
+
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
+
+		// check the header have Authorization
+		
+		String authorizationHeader = request.getHeader("Authorization");
+		
+		// check condition if don't have finish this request 
+		
+		if(Objects.isNull(authorizationHeader) || !authorizationHeader.startsWith("Bearer ")) {
+			
+			filterChain.doFilter(request, response);
+			return;
+			// finished can not login if does not have "Authorization" in the header
+		}
+		// else = have Auhorization we get only token and remove "Bearer "
+		String token = authorizationHeader.replace("Bearer ", "");
+		String secretKey ="abcddfdsf1243abcddfdsf1243abcddfdsf1243";
+		
+		try {
+			
+			Jws<Claims> claimsJws = Jwts.parser()
+					.setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes())).build().parseClaimsJws(token);
+					
+					Claims body = claimsJws.getBody();
+				
+					// now we get the Authorization 
+					
+					String username = body.getSubject();
+					
+					// we want object inside authorities ==> we put the Key then it will return object [ROLE_ADMIN : brand:read...]
+					
+					List<Map<String, String>> authorities = (List<Map<String, String>>) body.get("authorities");
+					
+					// 3: get Get Value from Map Object  
+				
+					Set<SimpleGrantedAuthority> grantedAuthorities = authorities.stream()
+							.map(x -> new SimpleGrantedAuthority(x.get("authority")))
+							.collect(Collectors.toSet());	
+					
+					//==>  "authority":  ==> "ROLE_SALE"
+					
+					// 2 : Need Authentication 
+					
+					Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, grantedAuthorities);
+					
+					// 1: to make it remember we use Security Holder
+					
+					SecurityContextHolder.getContext().setAuthentication(authentication);	
+					filterChain.doFilter(request, response); // doFilter in order tell the filete finish step 
+			
+		} catch (Exception e) {
+			log.info(e.getMessage());
+			throw new ApiException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}		
+		
+		
+		
+		
+	}
+
+}
+
+
+3. Add Filter and verity it is valid or not for the Jwt Token : FilterChainExceptionHandler
+
+@Slf4j
+@Component
+public class FilterChainExceptionHandler extends OncePerRequestFilter {
+
+	@Autowired
+	@Qualifier("handlerExceptionResolver")
+	private HandlerExceptionResolver resolver;
+
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
+
+		try {
+			filterChain.doFilter(request, response);
+		} catch (Exception e) {
+			log.error("Spring Security Filter Chain Exception:", e);
+			resolver.resolveException(request, response, null, e);
+		}
+	}
+}
+
+4. Add this filter to the secutiry confige : where we need to check it before the user can login 
+
+@Bean
+	public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+		http.csrf().disable()
+			.addFilter(new JwtLoginFilter(authenticationManager(authenticationConfiguration)))
+			.addFilterBefore(filterChainExceptionHandler, JwtLoginFilter.class)
+			.addFilterAfter(new TokenVerifyFilter(), JwtLoginFilter.class)
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+			.authorizeHttpRequests()
+			.antMatchers("/","index.html","css/**","js/**").permitAll()
+			.antMatchers(HttpMethod.PUT, "/brands/**").hasAuthority(PermissionEnum.BRAND_WRITE.getDescription())
+			//.antMatchers(HttpMethod.PUT, "/brands/**").has(PermissionEnum.BRAND_WRITE.getDescription())
+			.anyRequest()
+			.authenticated();
+		
+		return http.build();
+	}
+
+--------------- Testing Token 
+
+Expier token: 
+
+Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0aGlkYSIsImlhdCI6MTcyNTMzMzAyNiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6ImNvbG9yOndyaXRlIn0seyJhdXRob3JpdHkiOiJicmFuZDp3cml0ZSJ9LHsiYXV0aG9yaXR5IjoiYnJhbmQ6cmVhZCJ9LHsiYXV0aG9yaXR5IjoibW9kZWw6d3JpdGUifSx7ImF1dGhvcml0eSI6Im1vZGVsOnJlYWQifSx7ImF1dGhvcml0eSI6IlJPTEVfQWNjb3VudGFudCJ9LHsiYXV0aG9yaXR5IjoiUk9MRV9BZG1pbiJ9XSwiZXhwIjoxNzI1MzMzMDIwLCJpc3MiOiJwaG9uZXNob3AuY29tIn0.R2jAEqvEiUnw_Z8wGAk-cEWMn5txuYDbgsYcKrJ6_Fg
+
+================================
+
+Valid one day
+
+Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0aGlkYSIsImlhdCI6MTcyNTMzMjk3MCwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6ImNvbG9yOndyaXRlIn0seyJhdXRob3JpdHkiOiJicmFuZDp3cml0ZSJ9LHsiYXV0aG9yaXR5IjoiYnJhbmQ6cmVhZCJ9LHsiYXV0aG9yaXR5IjoibW9kZWw6d3JpdGUifSx7ImF1dGhvcml0eSI6Im1vZGVsOnJlYWQifSx7ImF1dGhvcml0eSI6IlJPTEVfQWNjb3VudGFudCJ9LHsiYXV0aG9yaXR5IjoiUk9MRV9BZG1pbiJ9XSwiZXhwIjoxNzI1MzgyODAwLCJpc3MiOiJwaG9uZXNob3AuY29tIn0.swc8pBHfXOQltiZfVh5b969CQGGZP3bgl-DS4kk5yOo
+
+---------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

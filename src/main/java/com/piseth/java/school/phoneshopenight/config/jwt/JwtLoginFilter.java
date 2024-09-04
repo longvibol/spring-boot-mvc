@@ -60,13 +60,17 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 		
 		String secretKey ="abcddfdsf1243abcddfdsf1243abcddfdsf1243";
 		
+		Date expierDate = new Date();
+		expierDate.setSeconds(1);
+		
 		String token = Jwts.builder()
 				.setSubject(authResult.getName())
 				.setIssuedAt(new Date())
 				.claim("authorities", authResult.getAuthorities())
-				.setIssuedAt(new Date())
+				.setIssuedAt(new Date())			
 				//.setExpiration(java.sql.Date.valueOf(LocalDate.now().plus(null) 	 	
-				.setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(1)))
+				//.setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(1)))
+				.setExpiration(expierDate)
 				.setIssuer("phoneshop.com")
 				.signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))				
 				.compact();

@@ -21,7 +21,6 @@ import com.piseth.java.school.phoneshopenight.config.jwt.JwtLoginFilter;
 import com.piseth.java.school.phoneshopenight.config.jwt.TokenVerifyFilter;
 
 @Configuration
-@SuppressWarnings("deprecation")
 @EnableGlobalMethodSecurity(
   prePostEnabled = true, 
   securedEnabled = true, 
@@ -34,25 +33,24 @@ public class SecurityConfig {
 	private UserDetailsService userDetailsService;
 	
 	@Autowired
-	AuthenticationConfiguration authenticationConfiguration;
-	
-	@Autowired
 	private FilterChainExceptionHandler filterChainExceptionHandler; 
 
+	private AuthenticationConfiguration authenticationConfiguration;
+	
 	@Bean
 	public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-		http
-				.csrf().disable()
-				.addFilter(new JwtLoginFilter(authenticationManager(authenticationConfiguration)))
-				.addFilterBefore(filterChainExceptionHandler,JwtLoginFilter.class )
-				.addFilterAfter(new TokenVerifyFilter(), JwtLoginFilter.class)
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // no data store in token 
-				.and()
-				.authorizeHttpRequests()
-				.antMatchers("/", "index.html", "css/**", "js/**").permitAll()
-				//.antMatchers(HttpMethod.PUT, "/brands/**").hasAuthority(PermissionEnum.BRAND_WRITE.getDescription())
-				.anyRequest()				
-				.authenticated();
+		http.csrf().disable()
+			.addFilter(new JwtLoginFilter(authenticationManager(authenticationConfiguration)))
+			.addFilterBefore(filterChainExceptionHandler, JwtLoginFilter.class)
+			.addFilterAfter(new TokenVerifyFilter(), JwtLoginFilter.class)
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+			.authorizeHttpRequests()
+			.antMatchers("/","index.html","css/**","js/**").permitAll()
+			.antMatchers(HttpMethod.PUT, "/brands/**").hasAuthority(PermissionEnum.BRAND_WRITE.getDescription())
+			//.antMatchers(HttpMethod.PUT, "/brands/**").has(PermissionEnum.BRAND_WRITE.getDescription())
+			.anyRequest()
+			.authenticated();
 		
 		return http.build();
 	}

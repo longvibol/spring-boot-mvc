@@ -12,11 +12,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.piseth.java.school.phoneshopenight.exception.ApiException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -56,7 +59,7 @@ public class TokenVerifyFilter extends OncePerRequestFilter{
 				
 					// now we get the Authorization 
 					
-					String subject = body.getSubject();
+					String username = body.getSubject();
 					
 					// we want object inside authorities ==> we put the Key then it will return object [ROLE_ADMIN : brand:read...]
 					
@@ -72,17 +75,19 @@ public class TokenVerifyFilter extends OncePerRequestFilter{
 					
 					// 2 : Need Authentication 
 					
-					Authentication authentication = new UsernamePasswordAuthenticationToken(subject, null, grantedAuthorities);
+					Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, grantedAuthorities);
 					
 					// 1: to make it remember we use Security Holder
 					
-					SecurityContextHolder.getContext().setAuthentication(authentication);			
+					SecurityContextHolder.getContext().setAuthentication(authentication);	
+					filterChain.doFilter(request, response); // doFilter in order tell the filete finish step 
 			
 		} catch (Exception e) {
 			log.info(e.getMessage());
+			throw new ApiException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}		
 		
-		filterChain.doFilter(request, response); // doFilter in order tell the filete finish step 
+		
 		
 		
 	}
